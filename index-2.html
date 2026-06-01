@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Průhonická Botanická Zahrada — Not Trending</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700;900&display=swap" rel="stylesheet" />
+  <!--
+  FONT MILEK:
+  1. Stáhněte z: https://www.1001fonts.com/milker-font.html
+  2. Zkopírujte Milker.otf vedle index.html
+  3. Odkomentujte @font-face níže a změňte --font na 'Milker', sans-serif
+  <style>
+    @font-face { font-family: 'Milker'; src: url('Milker.otf') format('opentype'); }
+  </style>
+  -->
+  <style>
+    :root {
+      --font: 'Lexend', sans-serif;
+      --ink:  #111110;
+      --dim:  #888;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --nav-h: 56px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: var(--ink); font-family: var(--font); font-weight: 300; overflow-x: hidden; }
+    img { display: block; width: 100%; }
+    button { cursor: pointer; border: none; background: none; }
+    a { color: inherit; text-decoration: none; }
+    section { scroll-margin-top: var(--nav-h); }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100; height: var(--nav-h);
+      display: flex; align-items: center;
+      padding: 0 clamp(16px, 4vw, 48px);
+    }
+    nav::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .hamburger {
+      position: relative; z-index: 1;
+      width: 40px; height: 40px;
+      display: flex; flex-direction: column;
+      justify-content: center; gap: 6px; padding: 6px;
+    }
+    .hamburger span {
+      display: block; height: 1.5px; background: #fff;
+      transition: transform 0.35s var(--ease), opacity 0.25s, width 0.3s;
+      transform-origin: left center;
+    }
+    .hamburger span:nth-child(3) { width: 65%; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translateY(-1px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translateY(1px); width: 100%; }
+
+    /* DROPDOWN */
+    .dropdown {
+      position: fixed; top: var(--nav-h);
+      left: clamp(16px, 4vw, 48px);
+      background: rgba(17,17,16,0.94);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      z-index: 99; min-width: 210px; padding: 8px 0; border-radius: 12px;
+      transform-origin: top left;
+      transform: scaleY(0.8) translateY(-10px);
+      opacity: 0; pointer-events: none;
+      transition: transform 0.3s var(--ease), opacity 0.25s;
+    }
+    .dropdown.open { transform: scaleY(1) translateY(0); opacity: 1; pointer-events: all; }
+    .dropdown a {
+      display: block; padding: 13px 24px;
+      font-size: 0.78rem; font-weight: 400;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      transition: background 0.15s;
+      border-radius: 6px; margin: 0 6px;
+    }
+    .dropdown a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* HERO */
+    .hero { position: relative; height: 100dvh; overflow: hidden; }
+    .slides { display: flex; height: 100%; transition: transform 0.9s var(--ease); }
+    .slide {
+      min-width: 100%; height: 100%;
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .slide img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .slide::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.26) 0%, transparent 36%, rgba(0,0,0,0.2) 100%);
+    }
+
+    /* ARROWS */
+    .carousel-arrow { display: none; }
+    @media (min-width: 768px) {
+      .carousel-arrow {
+        display: flex; position: absolute; top: 50%;
+        transform: translateY(-50%); z-index: 10;
+        width: 50px; height: 50px; border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.3);
+        align-items: center; justify-content: center;
+        color: #fff; font-size: 1.1rem;
+        backdrop-filter: blur(8px);
+        background: rgba(255,255,255,0.05);
+        transition: background 0.3s, border-color 0.3s;
+      }
+      .carousel-arrow:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.7); }
+      .carousel-arrow.prev { left: clamp(16px,3vw,40px); }
+      .carousel-arrow.next { right: clamp(16px,3vw,40px); }
+    }
+
+    /* DOTS */
+    .carousel-dots {
+      position: absolute; bottom: 20px; left: 50%;
+      transform: translateX(-50%); z-index: 10;
+      display: flex; gap: 8px;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.35); cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dot.active { background: #fff; transform: scale(1.4); }
+
+    /* MARQUEE — rychlý, tučný obrys */
+    .marquee-wrap {
+      position: absolute; bottom: 68px; left: 0; right: 0;
+      z-index: 10; overflow: hidden; pointer-events: none;
+    }
+    .marquee-track { display: flex; white-space: nowrap; animation: marquee 9s linear infinite; }
+    .marquee-text {
+      font-family: var(--font); font-size: clamp(3.5rem, 10vw, 9rem);
+      font-weight: 900; color: transparent;
+      -webkit-text-stroke: 3.5px rgba(255,255,255,0.92);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      padding-right: 0.5em; line-height: 1;
+    }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* TITLE SECTION */
+    .title-section {
+      padding: clamp(52px,9vw,110px) clamp(24px,8vw,160px) clamp(40px,6vw,80px);
+      max-width: 1200px; margin: 0 auto;
+      border-bottom: 1px solid #e8e8e6;
+    }
+    .eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 1.2rem;
+    }
+    .title-section h1 {
+      font-family: var(--font); font-size: clamp(2.4rem,6vw,5.5rem);
+      font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.02em; line-height: 1.0;
+      color: var(--ink); margin-bottom: 1rem;
+    }
+    /* NOT TRENDING — černý, tučný + umělecký projekt na stejném řádku */
+    .since-row {
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      gap: 0.5em; margin-bottom: 2rem;
+    }
+    .since-tag {
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #666;
+      line-height: 1.2;
+    }
+    .project-type {
+      font-size: clamp(0.75rem, 1.1vw, 0.88rem);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      line-height: 1.2;
+    }
+    .title-text {
+      font-size: clamp(0.95rem,1.3vw,1.05rem);
+      line-height: 1.9; color: #444; max-width: 640px;
+    }
+    .title-text p + p { margin-top: 1.2em; }
+
+    /* GALLERY */
+    .gallery-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--dim);
+      margin-bottom: 1.6rem; display: block;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px; max-width: 1200px; margin: 0 auto;
+    }
+    @media (min-width: 600px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 900px) { .gallery-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; } }
+    .gallery-item {
+      position: relative; aspect-ratio: 3/4;
+      overflow: hidden; cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s var(--ease);
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    /* overlay jen dole — název + rok, BEZ nápisu nahoře */
+    .gallery-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.35s;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: flex-end;
+      padding: 12px; gap: 2px;
+    }
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .gallery-item-overlay .g-name {
+      font-size: 0.72rem; color: #fff;
+      letter-spacing: 0.04em; font-weight: 700;
+      text-transform: uppercase; line-height: 1.2;
+    }
+    .gallery-item-overlay .g-year {
+      font-size: 0.65rem; color: rgba(255,255,255,0.65);
+      letter-spacing: 0.08em; font-weight: 300;
+    }
+
+    /* POSTERS */
+    .posters-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); background: var(--ink); }
+    .posters-inner { max-width: 1200px; margin: 0 auto; }
+    .posters-inner .section-label { color: rgba(255,255,255,0.3); }
+    .posters-inner h2 {
+      font-family: var(--font); font-size: clamp(1.8rem,3.5vw,3rem);
+      font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.03em; color: #fff;
+      margin-bottom: 2rem; line-height: 1.05;
+    }
+    .posters-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    }
+    @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; } }
+    .poster-item { aspect-ratio: 2/3; overflow: hidden; position: relative; }
+    .poster-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
+    .poster-item:hover img { transform: scale(1.05); }
+    .poster-placeholder {
+      aspect-ratio: 2/3; background: #1c1c1a;
+      border: 1px dashed rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .poster-placeholder span {
+      font-size: 0.68rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(255,255,255,0.16);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: clamp(24px,4vw,44px) clamp(24px,5vw,80px);
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px; text-align: center;
+    }
+    footer p { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+    footer p:first-child { font-weight: 700; color: rgba(255,255,255,0.6); }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+    footer a:hover { color: #fff; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(10,10,9,0.9);
+      z-index: 200; display: flex; align-items: center; justify-content: center;
+      padding: clamp(12px,3vw,40px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s; backdrop-filter: blur(6px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #fff; width: 100%; max-width: 1000px; max-height: 90dvh;
+      display: grid; grid-template-columns: 1fr; overflow: hidden;
+      transform: translateY(28px) scale(0.97);
+      transition: transform 0.5s var(--ease); position: relative;
+    }
+    @media (min-width: 640px) { .modal { grid-template-columns: 1fr 1fr; max-height: 85dvh; } }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-img { height: clamp(240px,50vw,600px); overflow: hidden; }
+    @media (min-width: 640px) { .modal-img { height: auto; } }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-content {
+      padding: clamp(24px,4vw,52px); overflow-y: auto;
+      display: flex; flex-direction: column; justify-content: center; gap: 0.8rem;
+    }
+    .modal-tag { font-size: 0.62rem; letter-spacing: 0.26em; text-transform: uppercase; color: #999; }
+    .modal-year { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: #bbb; }
+    .modal-content h3 {
+      font-family: var(--font); font-size: clamp(1.4rem,3vw,2.4rem);
+      font-weight: 900; text-transform: uppercase; line-height: 1.1; color: var(--ink);
+    }
+    .modal-content p { font-size: 0.9rem; line-height: 1.88; color: #555; }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--ink); color: #fff; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.25s; z-index: 10;
+    }
+    .modal-close:hover { background: #444; transform: rotate(90deg); }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="dropdown" id="dropdown">
+  <a href="#o-projektu">O projektu</a>
+  <a href="#fotografie">Fotografie</a>
+  <a href="#plakaty">Plakáty v terénu</a>
+  <a href="#kontakt">Kontakt</a>
+</div>
+
+<nav aria-label="Hlavní navigace">
+  <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="dropdown" aria-label="Otevřít menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="hero" id="uvod">
+  <div class="slides" id="slides">
+
+    <div class="slide"
+         data-img="PRUHONICE-1.jpg" data-alt="Queen of May"
+         data-tag="Iris germanica" data-year="~ 1858"
+         data-title="Queen of May"
+         data-text="Jedna z nejstarších zaznamenaných odrůd kosatce německého s jemnými teplými tóny. Odrůda 'Queen of May' pochází z 50. let 19. století a patří k historickým kultivarům uchovaným v průhonické sbírce.">
+      <img src="PRUHONICE-1.jpg" alt="Queen of May" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-2.jpg" data-alt="Jacquesiana"
+         data-tag="Iris germanica" data-year="~ 1840"
+         data-title="Jacquesiana"
+         data-text="'Jacquesiana' byl vyšlechtěn francouzským zahradníkem Lémonem v roce 1840 a pojmenován na počest Henriho-Antoina Jacquese. Patří k nejstarším stále pěstovaným odrůdám kosatce v historických sbírkách světa.">
+      <img src="PRUHONICE-2.jpg" alt="Jacquesiana" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-4.jpg" data-alt="Madame Chéreau"
+         data-tag="Iris germanica" data-year="1844"
+         data-title="Madame Chéreau"
+         data-text="'Madame Chéreau' — pojmenovaná na počest manželky prezidenta francouzské zahradnické společnosti — pochází z roku 1844. Je jednou z nejpopulárnějších odrůd 19. století a dodnes patří k nejhledanějším historickým kultivarům.">
+      <img src="PRUHONICE-4.jpg" alt="Madame Chéreau" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-5.jpg" data-alt="Faustine"
+         data-tag="Iris germanica" data-year="1859"
+         data-title="Faustine"
+         data-text="'Faustine' z roku 1859 představuje typický příklad francouzského šlechtění druhé poloviny 19. století. Její jemné zbarvení a elegantní tvar okvětních lístků ji řadí mezi nejcennější historické odrůdy průhonické sbírky.">
+      <img src="PRUHONICE-5.jpg" alt="Faustine" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-6.jpg" data-alt="Honorabile"
+         data-tag="Iris germanica" data-year="1840"
+         data-title="Honorabile"
+         data-text="'Honorabile' z roku 1840 je jednou z nejdéle pěstovaných odrůd kosatce vůbec. Její odolnost a krása ji po více než 180 let udržují v zahradách po celém světě. V Průhonicích je součástí chronologicky řazené expozice historických kultivarů.">
+      <img src="PRUHONICE-6.jpg" alt="Honorabile" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-7.jpg" data-alt="Flavescens"
+         data-tag="Iris germanica" data-year="&lt; 1813"
+         data-title="Flavescens"
+         data-text="'Flavescens' je doložena před rokem 1813 a patří tak k vůbec nejstarším pojmenovaným odrůdám kosatce. Průhonická botanická zahrada ji uchovává jako součást svého genofondového poslání — záchrana kultivarů, jejichž existenci by jinak pohltilo zapomnění.">
+      <img src="PRUHONICE-7.jpg" alt="Flavescens" />
+    </div>
+
+  </div>
+
+  <button class="carousel-arrow prev" id="prevBtn" aria-label="Předchozí">&#8592;</button>
+  <button class="carousel-arrow next" id="nextBtn" aria-label="Následující">&#8594;</button>
+  <div class="carousel-dots" id="dots" role="tablist" aria-label="Výběr snímku"></div>
+
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- ══ O PROJEKTU ════════════════════════════════════════ -->
+<section id="o-projektu">
+  <div class="title-section">
+    <p class="eyebrow reveal">Průhonická botanická zahrada</p>
+    <h1 class="reveal">PRŮHONICKÁ<br>BOTANICKÁ<br>ZAHRADA</h1>
+    <div class="since-row reveal">
+      <span class="since-tag">NOT TRENDING —</span>
+      <span class="project-type">Umělecký projekt</span>
+    </div>
+    <div class="title-text reveal">
+      <p>Projekt vznikl v rámci klauzurního zadání ve spolupráci s Průhonickou botanickou zahradou — institucí, která spravuje jednu z největších světových sbírek historických odrůd pivoněk a růží, ale i kosatců, na které se v naší práci zaměřujeme. Zahrada pečuje o kultivary staré dvě stě, někdy i více let — rostliny, které nesou jména z dob, kdy zahradnictví bylo uměním i vědou zároveň.</p>
+      <p>Náš projekt se snaží poukázat na důležitost jejich práce a dát do povědomí zájem o instituce, jako je Průhonická botanická zahrada. NOT TRENDING pojmenovává právě neviditelnou hodnotu těchto míst: rádi se na to podíváme, nebo to chceme na zahrádku — ale dál nic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GALERIE ════════════════════════════════════════════
+     Přidat fotku: zkopírujte blok gallery-item, změňte src + data-*
+════════════════════════════════════════════════════════ -->
+<section class="gallery-section" id="fotografie">
+  <span class="section-label reveal">Fotografie</span>
+  <div class="gallery-grid">
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-1.jpg" data-alt="Queen of May"
+         data-tag="Iris germanica" data-year="~ 1858"
+         data-title="Queen of May"
+         data-text="Jedna z nejstarších zaznamenaných odrůd kosatce německého s jemnými teplými tóny. Odrůda 'Queen of May' pochází z 50. let 19. století a patří k historickým kultivarům uchovaným v průhonické sbírce.">
+      <img src="PRUHONICE-1.jpg" alt="Queen of May" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Queen of May</span>
+        <span class="g-year">Iris germanica · ~ 1858</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-2.jpg" data-alt="Jacquesiana"
+         data-tag="Iris germanica" data-year="~ 1840"
+         data-title="Jacquesiana"
+         data-text="'Jacquesiana' byl vyšlechtěn francouzským zahradníkem Lémonem v roce 1840 a pojmenován na počest Henriho-Antoina Jacquese. Patří k nejstarším stále pěstovaným odrůdám kosatce v historických sbírkách světa.">
+      <img src="PRUHONICE-2.jpg" alt="Jacquesiana" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Jacquesiana</span>
+        <span class="g-year">Iris germanica · ~ 1840</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-4.jpg" data-alt="Madame Chéreau"
+         data-tag="Iris germanica" data-year="1844"
+         data-title="Madame Chéreau"
+         data-text="'Madame Chéreau' — pojmenovaná na počest manželky prezidenta francouzské zahradnické společnosti — pochází z roku 1844. Je jednou z nejpopulárnějších odrůd 19. století a dodnes patří k nejhledanějším historickým kultivarům.">
+      <img src="PRUHONICE-4.jpg" alt="Madame Chéreau" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Madame Chéreau</span>
+        <span class="g-year">Iris germanica · 1844</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-5.jpg" data-alt="Faustine"
+         data-tag="Iris germanica" data-year="1859"
+         data-title="Faustine"
+         data-text="'Faustine' z roku 1859 představuje typický příklad francouzského šlechtění druhé poloviny 19. století. Její jemné zbarvení a elegantní tvar okvětních lístků ji řadí mezi nejcennější historické odrůdy průhonické sbírky.">
+      <img src="PRUHONICE-5.jpg" alt="Faustine" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Faustine</span>
+        <span class="g-year">Iris germanica · 1859</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-6.jpg" data-alt="Honorabile"
+         data-tag="Iris germanica" data-year="1840"
+         data-title="Honorabile"
+         data-text="'Honorabile' z roku 1840 je jednou z nejdéle pěstovaných odrůd kosatce vůbec. Její odolnost a krása ji po více než 180 let udržují v zahradách po celém světě. V Průhonicích je součástí chronologicky řazené expozice historických kultivarů.">
+      <img src="PRUHONICE-6.jpg" alt="Honorabile" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Honorabile</span>
+        <span class="g-year">Iris germanica · 1840</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-7.jpg" data-alt="Flavescens"
+         data-tag="Iris germanica" data-year="&lt; 1813"
+         data-title="Flavescens"
+         data-text="'Flavescens' je doložena před rokem 1813 a patří tak k vůbec nejstarším pojmenovaným odrůdám kosatce. Průhonická botanická zahrada ji uchovává jako součást svého genofondového poslání — záchrana kultivarů, jejichž existenci by jinak pohltilo zapomnění.">
+      <img src="PRUHONICE-7.jpg" alt="Flavescens" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Flavescens</span>
+        <span class="g-year">Iris germanica · &lt; 1813</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ PLAKÁTY V TERÉNU ══════════════════════════════════
+     Nahraďte poster-placeholder bloky:
+     <div class="poster-item">
+       <img src="PLAKAT-X.jpg" alt="Plakát" loading="lazy" />
+     </div>
+════════════════════════════════════════════════════════ -->
+<section class="posters-section" id="plakaty">
+  <div class="posters-inner">
+    <h2 class="reveal">Plakáty<br>v terénu</h2>
+    <div class="posters-grid">
+      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
+      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
+      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
+      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="kontakt">
+  <p>Průhonická Botanická Zahrada</p>
+  <p>Not Trending</p>
+  <p><a href="http://www.ibotky.cz" target="_blank" rel="noopener">www.ibotky.cz</a></p>
+  <p>© 2025</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Detail fotografie">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Zavřít">✕</button>
+    <div class="modal-img"><img src="" alt="" id="modalImg" /></div>
+    <div class="modal-content">
+      <p class="modal-tag" id="modalTag"></p>
+      <p class="modal-year" id="modalYear"></p>
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Hamburger */
+  const hamburger = document.getElementById('hamburger');
+  const dropdown  = document.getElementById('dropdown');
+  function toggleMenu(open) {
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+    dropdown.classList.toggle('open', open);
+  }
+  hamburger.addEventListener('click', e => { e.stopPropagation(); toggleMenu(!dropdown.classList.contains('open')); });
+  document.addEventListener('click', e => { if (!dropdown.contains(e.target) && !hamburger.contains(e.target)) toggleMenu(false); });
+  dropdown.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+  /* Carousel */
+  const slidesEl = document.getElementById('slides');
+  const slides   = Array.from(slidesEl.querySelectorAll('.slide'));
+  const dotsEl   = document.getElementById('dots');
+  let current    = 0;
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Snímek ' + (i + 1));
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+  function goTo(idx) {
+    dotsEl.children[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    dotsEl.children[current].classList.add('active');
+    slidesEl.style.transform = 'translateX(-' + (current * 100) + '%)';
+  }
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+  let touchStartX = 0;
+  slidesEl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  slidesEl.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - touchStartX; if (Math.abs(dx) > 48) goTo(dx < 0 ? current + 1 : current - 1); });
+  slides.forEach(slide => slide.addEventListener('click', () => openModal(slide)));
+
+  /* Marquee */
+  const mt = document.getElementById('marqueeTrack');
+  let mh = '';
+  for (let i = 0; i < 16; i++) mh += '<span class="marquee-text">NOT TRENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  mt.innerHTML = mh;
+
+  /* Modal */
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalClose   = document.getElementById('modalClose');
+  const modalImg     = document.getElementById('modalImg');
+  const modalTag     = document.getElementById('modalTag');
+  const modalYear    = document.getElementById('modalYear');
+  const modalTitle   = document.getElementById('modalTitle');
+  const modalText    = document.getElementById('modalText');
+  function openModal(item) {
+    const d = item.dataset;
+    modalImg.src           = d.img   || '';
+    modalImg.alt           = d.alt   || '';
+    modalTag.textContent   = d.tag   || '';
+    modalYear.textContent  = d.year  || '';
+    modalTitle.textContent = d.title || '';
+    modalText.textContent  = d.text  || '';
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => modalClose.focus(), 100);
+  }
+  function closeModal() { modalOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => openModal(item));
+    item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(item); } });
+  });
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* Scroll reveal */
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) { setTimeout(() => entry.target.classList.add('visible'), i * 80); ro.unobserve(entry.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
