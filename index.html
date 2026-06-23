@@ -128,7 +128,7 @@
     }
     .dot.active { background: #fff; transform: scale(1.4); }
 
-    /* MARQUEE */
+    /* MARQUEE — over hero photos */
     .marquee-wrap {
       position: absolute; bottom: 68px; left: 0; right: 0;
       z-index: 10; overflow: hidden; pointer-events: none;
@@ -142,6 +142,13 @@
       padding-right: 0.5em; line-height: 1;
     }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Subtle slow pan on hero photos while marquee scrolls on top */
+    .slide img { animation: slowPan 14s ease-in-out infinite alternate; }
+    @keyframes slowPan {
+      from { transform: scale(1.06) translate(0, 0); }
+      to   { transform: scale(1.13) translate(-1.5%, -1.5%); }
+    }
 
     /* TITLE SECTION */
     .title-section {
@@ -165,10 +172,10 @@
     }
     .since-tag {
       font-size: clamp(1rem, 1.8vw, 1.3rem);
-      font-weight: 700;
+      font-weight: 900;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #666;
+      color: var(--ink);
       line-height: 1.2;
     }
     .project-type {
@@ -176,7 +183,7 @@
       font-weight: 300;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--ink);
       line-height: 1.2;
     }
     .title-text {
@@ -185,8 +192,8 @@
     }
     .title-text p + p { margin-top: 1.2em; }
 
-    /* GALLERY */
-    .gallery-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); }
+    /* GALLERY — main focus, larger images */
+    .gallery-section { padding: clamp(48px,7vw,90px) clamp(24px,5vw,80px); }
     .section-label {
       font-size: 0.68rem; letter-spacing: 0.26em;
       text-transform: uppercase; color: var(--dim);
@@ -194,11 +201,10 @@
     }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px; max-width: 1200px; margin: 0 auto;
+      grid-template-columns: 1fr;
+      gap: 16px; max-width: 900px; margin: 0 auto;
     }
-    @media (min-width: 600px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 900px) { .gallery-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; } }
+    @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
     .gallery-item {
       position: relative; aspect-ratio: 3/4;
       overflow: hidden; cursor: pointer;
@@ -214,108 +220,138 @@
       opacity: 0; transition: opacity 0.35s;
       display: flex; flex-direction: column;
       align-items: flex-start; justify-content: flex-end;
-      padding: 12px; gap: 2px;
+      padding: 16px; gap: 2px;
     }
     .gallery-item:hover .gallery-item-overlay { opacity: 1; }
     .gallery-item-overlay .g-name {
-      font-size: 0.72rem; color: #fff;
+      font-size: 0.9rem; color: #fff;
       letter-spacing: 0.04em; font-weight: 700;
       text-transform: uppercase; line-height: 1.2;
     }
     .gallery-item-overlay .g-year {
-      font-size: 0.65rem; color: rgba(255,255,255,0.65);
+      font-size: 0.74rem; color: rgba(255,255,255,0.65);
       letter-spacing: 0.08em; font-weight: 300;
     }
 
-    /* PEOPLE — Sekerka + Caspers section */
+    /* PEOPLE — small, secondary section */
     .people-section {
-      padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px);
+      padding: clamp(28px,4vw,48px) clamp(24px,5vw,80px);
       border-top: 1px solid #e8e8e6;
       border-bottom: 1px solid #e8e8e6;
     }
     .people-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 28px;
-      max-width: 1200px; margin: 0 auto;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 600px; margin: 0 auto;
     }
-    @media (min-width: 700px) { .people-grid { grid-template-columns: 1fr 1fr; } }
-    .person-card { }
+    .person-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
     .person-photo {
-      aspect-ratio: 4/5;
-      overflow: hidden;
-      margin-bottom: 14px;
+      width: 88px; height: 88px; border-radius: 50%;
+      overflow: hidden; margin-bottom: 10px;
       background: #f2f2f0;
     }
     .person-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .person-photo.placeholder {
-      display: flex; align-items: center; justify-content: center;
-      border: 1px dashed #ccc;
-    }
-    .person-photo.placeholder span {
-      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #aaa;
-      text-align: center; padding: 0 16px;
-    }
     .person-name {
-      font-size: 1rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.03em; color: var(--ink); margin-bottom: 2px;
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.02em; color: var(--ink); margin-bottom: 1px;
     }
     .person-role {
-      font-size: 0.78rem; color: var(--dim); letter-spacing: 0.04em;
-      margin-bottom: 10px;
-    }
-    .person-quote {
-      font-size: 0.88rem; line-height: 1.8; color: #444;
+      font-size: 0.65rem; color: var(--dim); letter-spacing: 0.03em;
+      margin-bottom: 6px;
     }
     .person-link {
-      display: inline-block; margin-top: 10px;
-      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      display: inline-block; margin-top: 2px;
+      font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--ink); border-bottom: 1px solid var(--ink);
-      padding-bottom: 2px; transition: opacity 0.2s;
+      padding-bottom: 1px;
     }
-    .person-link:hover { opacity: 0.6; }
 
     /* POSTERS */
-    .posters-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); background: var(--ink); }
+    .posters-section { padding: clamp(36px,5vw,60px) clamp(24px,5vw,80px); background: var(--ink); }
     .posters-inner { max-width: 1200px; margin: 0 auto; }
-    .posters-inner .section-label { color: rgba(255,255,255,0.3); }
     .posters-inner h2 {
-      font-family: var(--font); font-size: clamp(1.8rem,3.5vw,3rem);
+      font-family: var(--font); font-size: clamp(1.5rem,3vw,2.4rem);
       font-weight: 900; text-transform: uppercase;
       letter-spacing: 0.03em; color: #fff;
-      margin-bottom: 2rem; line-height: 1.05;
+      margin-bottom: 1.6rem; line-height: 1.05;
     }
     .posters-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
     }
-    @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; } }
+    @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(10, 1fr); gap: 8px; } }
     .poster-item { position: relative; aspect-ratio: 2/3; overflow: hidden; cursor: pointer; }
     .poster-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
     .poster-item:hover img { transform: scale(1.05); }
     .poster-item-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
       opacity: 0; transition: opacity 0.35s;
-      display: flex; align-items: flex-end; padding: 10px;
+      display: flex; align-items: flex-end; padding: 6px;
     }
     .poster-item:hover .poster-item-overlay { opacity: 1; }
     .poster-item-overlay span {
-      font-size: 0.68rem; color: #fff; letter-spacing: 0.04em;
-      font-weight: 400; line-height: 1.3;
+      font-size: 0.56rem; color: #fff; letter-spacing: 0.02em;
+      font-weight: 400; line-height: 1.2;
     }
 
-    /* MAP */
-    .map-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); }
-    .map-inner { max-width: 1200px; margin: 0 auto; }
+    /* MAP — small, secondary */
+    .map-section { padding: clamp(28px,4vw,48px) clamp(24px,5vw,80px); }
+    .map-inner { max-width: 240px; margin: 0 auto; }
     .map-img {
-      width: 100%; border: 1px solid #e8e8e6;
+      width: 100%; border: 1px solid #e8e8e6; cursor: zoom-in;
+      transition: opacity 0.2s;
     }
+    .map-img:hover { opacity: 0.92; }
     .map-caption {
-      font-size: 0.78rem; color: var(--dim); line-height: 1.7;
-      margin-top: 12px; max-width: 680px;
+      font-size: 0.68rem; color: var(--dim); line-height: 1.6;
+      margin-top: 8px;
     }
     .map-caption a { text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
+
+    /* MAP ZOOM MODAL */
+    .map-zoom-overlay {
+      position: fixed; inset: 0; background: rgba(8,8,7,0.95);
+      z-index: 300; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s; overflow: hidden;
+      touch-action: none;
+    }
+    .map-zoom-overlay.open { opacity: 1; pointer-events: all; }
+    .map-zoom-stage {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .map-zoom-stage img {
+      max-width: none; max-height: none;
+      transform-origin: 0 0;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .map-zoom-stage img.dragging { cursor: grabbing; }
+    .map-zoom-close {
+      position: absolute; top: 16px; right: 16px; z-index: 10;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: #fff; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s;
+    }
+    .map-zoom-close:hover { background: rgba(255,255,255,0.2); }
+    .map-zoom-controls {
+      position: absolute; bottom: 16px; right: 16px; z-index: 10;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .map-zoom-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: #fff; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px); font-weight: 700;
+      transition: background 0.2s;
+    }
+    .map-zoom-btn:hover { background: rgba(255,255,255,0.2); }
 
     /* FOOTER */
     footer {
@@ -403,7 +439,7 @@
          data-img="PRUHONICE-1.jpg" data-alt="Mexicana"
          data-tag="Iris germanica (bradatý)" data-year="1859"
          data-title="Mexicana"
-         data-text="'Mexicana' vyšlechtil John Salter před rokem 1859. Patří mezi bradaté kosatce — název odkazuje na charakteristický 'kartáček' (vousek) uprostřed spodních okvětních lístků, který má napodobovat tykadla hmyzu a láká opylovače. U Mexicany jsou kartáčky sytě žluté až oranžové, na bílém podkladu žíhaném vínově červenou.">
+         data-text="'Mexicana' vyšlechtil John Salter před rokem 1859. Patří mezi bradaté kosatce — název odkazuje na charakteristický 'kartáček' (vousek) uprostřed spodních okvětních lístků, který má napodobovat tykadla hmyzu a láká opylovače.">
       <img src="PRUHONICE-1.jpg" alt="Mexicana" />
     </div>
 
@@ -411,7 +447,7 @@
          data-img="PRUHONICE-3.jpg" data-alt="Celeste"
          data-tag="Iris pallida" data-year="1858"
          data-title="Celeste"
-         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Má jednobarevné, nebesky modré květy s nádechem bílé a je známá svou silnou, sladkou vůní.">
+         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Je proslulá svou silnou, sladkou vůní, díky níž patřila k oblíbeným řezaným květinám viktoriánských zahrad.">
       <img src="PRUHONICE-3.jpg" alt="Celeste" />
     </div>
 
@@ -427,7 +463,7 @@
          data-img="PRUHONICE-5.jpg" data-alt="Princess Beatrice"
          data-tag="Iris pallida" data-year="1898"
          data-title="Princess Beatrice"
-         data-text="'Princess Beatrice' představil v roce 1898 britský šlechtitel Barr. Mnozí odborníci se dodnes přou, zda nejde jen o jiné jméno pro starší odrůdu Dalmatica — zmatek kolem názvů historických kosatců byl běžný už ve viktoriánské éře, kdy se rostliny šířily mezi zahradníky bez jednotné evidence.">
+         data-text="'Princess Beatrice' představil v roce 1898 britský šlechtitel Barr. Mnozí odborníci se dodnes přou, zda nejde jen o jiné jméno pro starší odrůdu Dalmatica — zmatek kolem názvů historických kosatců byl běžný už ve viktoriánské éře.">
       <img src="PRUHONICE-5.jpg" alt="Princess Beatrice" />
     </div>
 
@@ -443,7 +479,7 @@
          data-img="PRUHONICE-7.jpg" data-alt="Gracchus"
          data-tag="Iris germanica (bradatý)" data-year="1884"
          data-title="Gracchus"
-         data-text="'Gracchus' vyšlechtil Thomas Ware v roce 1884 a o rok později získal ocenění First Class Certificate Královské zahradnické společnosti (RHS). Žluté kartáčky a karmínově žíhané pády z něj dodnes dělají oblíbenou odrůdu mezi sběrateli historických kosatců — navzdory tomu, že byl roku 1924 paradoxně zařazen na 'černou listinu' jako zastaralý.">
+         data-text="'Gracchus' vyšlechtil Thomas Ware v roce 1884 a o rok později získal ocenění First Class Certificate Královské zahradnické společnosti (RHS). Navzdory tomu byl roku 1924 paradoxně zařazen na 'černou listinu' jako zastaralý.">
       <img src="PRUHONICE-7.jpg" alt="Gracchus" />
     </div>
 
@@ -468,17 +504,17 @@
       <span class="project-type">Umělecký projekt</span>
     </div>
     <div class="title-text reveal">
-      <p>Projekt nese název Not Trending a vznikl ve spolupráci s Průhonickou botanickou zahradou, která spravuje jednu z největších sbírek historických odrůd pivoněk, růží, denivek a kosatců, na které se v naší práci zaměřujeme. Některé z těchto rostlin mají původ sahající až do 16. století a představují živé kulturní dědictví.</p>
-      <p>Naše klauzurní práce vznikala hlavně z rozhovorů s vedoucím botanické zahrady Pavlem Sekerkou a stráveným časem v zahradě. Od pana Sekerky jsme dostali spoustu podnětů na to, na co se v Průhonické botanické zahradě zaměřit. Inspirací nám byla jeho myšlenka, který proměnlivou popularitu rostlin přirovnal k módním trendům: desetiletý hadr nechceš, ale třicetiletý ano. Naše rozhovory se věnovaly i financování pracovníků zahrady, problematice rozdělení botanické zahrady a parku a postavení institucí spadajících pod Akademii věd.</p>
-      <p>Z těchto rozhovorů jsme se zaměřili na proměnlivost hodnoty rostlin v čase a s tím související proměnlivý společenský zájem. Botanická zahrada zde vystupuje jako instituce, která dlouhodobě uchovává a spravuje rostlinné sbírky bez ohledu na jejich aktuální popularitu či atraktivitu — a kdyby se o toto kulturní dědictví nestarali právě oni, řada odrůd by dnes už neexistovala.</p>
-      <p>Název NOT TRENDING SINCE odkazuje k vizuálnímu jazyku reklamy a módních kampaní, který je v projektu přenesen do prostředí botanické zahrady. Slogan pracuje s ironickým napětím mezi estetizací a pomíjivostí mediální pozornosti — rostliny jsou zde zobrazeny jako vizuálně přitažlivé objekty, jejichž význam nestojí na okamžité viditelnosti ani aktuálním zájmu veřejnosti. Inspirací nám byla estetika reklamních plakátů 70. let, které intenzivně pracovaly s vizuální přitažlivostí, jednoduchým rázným sloganem a pestrými barvami. Proto jsme se rozhodli projekt fotit na středoformát, aby plakáty byly esteticky silné a barevně výrazné — analogové fotografii se sám dál věnuji a snažím se v ní rozvíjet.</p>
-      <p>Projekt tedy obrací pozornost k botanické zahradě jako místu, které o rostliny pečuje bez ohledu na to, zda jsou v dané chvíli v centru veřejné pozornosti. Zahrada totiž není jen relaxační estetická zóna — uchovává jednu z největších sbírek kulturních rostlin na světě, a bez její práce by řada těchto odrůd dnes už neexistovala.</p>
-      <p>K propagaci byly vytvořeny plakáty, které byly vyvěšeny ve veřejném prostoru v Praze, Ústí nad Labem, Litoměřicích, Průhonicích a Plzni. Každý z nich obsahuje QR kód odkazující na tuto webovou stránku. Společně tak tvoří propagační materiál, který upozorňuje na význam práce, jež by jinak zůstala bez povšimnutí.</p>
+      <p>Projekt Not Trending vznikl ve spolupráci s Průhonickou botanickou zahradou, která spravuje jednu z největších sbírek historických odrůd pivoněk, růží, denivek a kosatců, na které se v naší práci zaměřujeme. Některé z těchto rostlin mají původ sahající až do 16. století a představují živé kulturní dědictví.</p>
+      <p>Projekt obrací pozornost k botanické zahradě jako místu, které o rostliny pečuje bez ohledu na to, zda jsou v dané chvíli v centru veřejného zájmu. Zahrada není pouze estetickým nebo odpočinkovým prostorem, ale také místem dlouhodobého uchovávání historických odrůd, které by bez této péče mohly zaniknout.</p>
+      <p>Projekt vznikal na základě rozhovorů s vedoucím botanické zahrady Pavlem Sekerkou a díky času strávenému přímo v prostředí zahrady. Inspirací nám byla jeho myšlenka, že podobně jako módní trendy procházejí i rostliny obdobími zájmu a opomíjení — to, co dnes není považováno za aktuální, může být v budoucnu znovu objeveno jako cenné.</p>
+      <p>Náš projekt se zaměřuje na vztah mezi popularitou, estetikou a dlouhodobou hodnotou rostlin. Práce botanické zahrady zde představuje péči, která nepodléhá krátkodobým změnám zájmu, ale zaměřuje se na zachování rostlinného dědictví pro budoucnost.</p>
+      <p>Název NOT TRENDING SINCE odkazuje k jazyku reklamy a módních kampaní. V projektu pracujeme s kontrastem mezi rychle se měnícími trendy a rostlinami, jejichž význam není založený na momentální popularitě. Slogan využívá ironii — rostliny jsou prezentovány jako estetické objekty, jejich hodnota ale nespočívá pouze v aktuální pozornosti.</p>
+      <p>Součástí projektu jsou plakáty umístěné ve veřejném prostoru v Praze, Ústí nad Labem, Litoměřicích, Průhonicích a Plzni. Každý plakát obsahuje QR kód odkazující na webovou stránku projektu. Vzniklá vizuální kampaň propojuje jazyk propagace s tématem botanického dědictví a péče o rostliny, které by jinak mohly upadnout v zapomnění.</p>
     </div>
   </div>
 </section>
 
-<!-- ══ GALERIE ════════════════════════════════════════════ -->
+<!-- ══ GALERIE — hlavní náplň webu ═══════════════════════ -->
 <section class="gallery-section" id="fotografie">
   <span class="section-label reveal">Fotografie</span>
   <div class="gallery-grid">
@@ -499,7 +535,7 @@
          data-img="PRUHONICE-3.jpg" data-alt="Celeste"
          data-tag="Iris pallida" data-year="1858"
          data-title="Celeste"
-         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Má jednobarevné, nebesky modré květy s nádechem bílé a je známá svou silnou, sladkou vůní.">
+         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Je proslulá svou silnou, sladkou vůní, díky níž patřila k oblíbeným řezaným květinám viktoriánských zahrad.">
       <img src="PRUHONICE-3.jpg" alt="Celeste" loading="lazy" />
       <div class="gallery-item-overlay">
         <span class="g-name">Celeste</span>
@@ -558,15 +594,7 @@
   </div>
 </section>
 
-<!-- ══ LIDÉ ZA SBÍRKOU ═══════════════════════════════════
-     Pavel Sekerka — vedoucí zahrady, kurátor sbírky pivoněk
-     a Národní sbírky sněženek.
-     Kurátorkou sbírky KOSATCŮ je Ing. Zuzana Caspers
-     (ne Lucie Papoušková — to jméno se nepotvrdilo, proto
-     zde uvádíme ověřenou osobu). Fotku paní Caspers
-     nemáme, proto je tu prozatím placeholder + odkaz na
-     herbář kosatců na ibotky.cz.
-════════════════════════════════════════════════════════ -->
+<!-- ══ LIDÉ ZA SBÍRKOU — malá, doplňková sekce ═══════════ -->
 <section class="people-section" id="lide">
   <div class="people-grid">
 
@@ -575,8 +603,7 @@
         <img src="SEKERKA.jpg" alt="Pavel Sekerka, vedoucí Průhonické botanické zahrady" loading="lazy" />
       </div>
       <div class="person-name">Pavel Sekerka</div>
-      <div class="person-role">Vedoucí Průhonické botanické zahrady</div>
-      <p class="person-quote">Kurátor sbírky pivoněk a Národní sbírky sněženek. Od roku 2010 vede Průhonickou botanickou zahradu Botanického ústavu AV ČR.</p>
+      <div class="person-role">Vedoucí zahrady</div>
     </div>
 
     <div class="person-card reveal">
@@ -585,8 +612,7 @@
       </div>
       <div class="person-name">Zuzana Caspers</div>
       <div class="person-role">Kurátorka sbírky kosatců</div>
-      <p class="person-quote">Stará se o sbírku, která patří mezi čtyři největší kosatcové sbírky ve světě. Více o historii a odrůdách kosatců najdete v herbáři na webu zahrady.</p>
-      <a class="person-link" href="http://www.ibotky.cz/clanky/herbar-kosatce/strana-2.html" target="_blank" rel="noopener">Herbář kosatců — ibotky.cz →</a>
+      <a class="person-link" href="http://www.ibotky.cz/clanky/herbar-kosatce/strana-2.html" target="_blank" rel="noopener">Herbář kosatců →</a>
     </div>
 
   </div>
@@ -595,7 +621,7 @@
 <!-- ══ PLAKÁTY V TERÉNU ══════════════════════════════════ -->
 <section class="posters-section" id="plakaty">
   <div class="posters-inner">
-    <h2 class="reveal">Plakáty<br>v terénu</h2>
+    <h2 class="reveal">Plakáty v terénu</h2>
     <div class="posters-grid">
 
       <div class="poster-item reveal" role="button" tabindex="0"
@@ -604,7 +630,7 @@
            data-title="Anděl café"
            data-text="Plakát vyvěšený v Anděl café v Praze.">
         <img src="PLAKAT-ANDEL.jpg" alt="Plakát — Anděl café, Praha" loading="lazy" />
-        <div class="poster-item-overlay"><span>Anděl café, Praha</span></div>
+        <div class="poster-item-overlay"><span>Anděl café</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
@@ -613,7 +639,7 @@
            data-title="Národní divadlo"
            data-text="Plakát vyvěšený v okolí Národního divadla v Praze.">
         <img src="PLAKAT-NARODNI-DIVADLO.jpg" alt="Plakát — okolí Národního divadla, Praha" loading="lazy" />
-        <div class="poster-item-overlay"><span>Národní divadlo, Praha</span></div>
+        <div class="poster-item-overlay"><span>Národní divadlo</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
@@ -622,7 +648,7 @@
            data-title="PedF UK"
            data-text="Plakát vyvěšený na Pedagogické fakultě Univerzity Karlovy v Praze.">
         <img src="PLAKAT-PEDF-UK.jpg" alt="Plakát — Pedagogická fakulta UK, Praha" loading="lazy" />
-        <div class="poster-item-overlay"><span>PedF UK, Praha</span></div>
+        <div class="poster-item-overlay"><span>PedF UK</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
@@ -643,8 +669,53 @@
         <div class="poster-item-overlay"><span>Průhonice</span></div>
       </div>
 
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-CAFE-REGNER.jpg" data-alt="Plakát — Café Regner"
+           data-tag="" data-year=""
+           data-title="Café Regner"
+           data-text="Plakát vyvěšený v Café Regner.">
+        <img src="PLAKAT-CAFE-REGNER.jpg" alt="Plakát — Café Regner" loading="lazy" />
+        <div class="poster-item-overlay"><span>Café Regner</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-STANDART-CAFE.jpg" data-alt="Plakát — Standart Café"
+           data-tag="Plzeň" data-year=""
+           data-title="Standart Café"
+           data-text="Plakát vyvěšený ve Standart Café v Plzni.">
+        <img src="PLAKAT-STANDART-CAFE.jpg" alt="Plakát — Standart Café" loading="lazy" />
+        <div class="poster-item-overlay"><span>Standart Café, Plzeň</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-DILNY-1.jpg" data-alt="Plakát — Dílny"
+           data-tag="" data-year=""
+           data-title="Dílny"
+           data-text="Plakát vyvěšený v prostoru Dílny.">
+        <img src="PLAKAT-DILNY-1.jpg" alt="Plakát — Dílny" loading="lazy" />
+        <div class="poster-item-overlay"><span>Dílny</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-DILNY-2.jpg" data-alt="Plakát — Dílny"
+           data-tag="" data-year=""
+           data-title="Dílny"
+           data-text="Plakát vyvěšený v prostoru Dílny.">
+        <img src="PLAKAT-DILNY-2.jpg" alt="Plakát — Dílny" loading="lazy" />
+        <div class="poster-item-overlay"><span>Dílny</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-DILNY-3.jpg" data-alt="Plakát — Dílny"
+           data-tag="" data-year=""
+           data-title="Dílny"
+           data-text="Plakát vyvěšený v prostoru Dílny.">
+        <img src="PLAKAT-DILNY-3.jpg" alt="Plakát — Dílny" loading="lazy" />
+        <div class="poster-item-overlay"><span>Dílny</span></div>
+      </div>
+
       <!--
-      PŘIDAT DALŠÍ PLAKÁT (Ústí nad Labem, Litoměřice, Plzeň…):
+      PŘIDAT DALŠÍ PLAKÁT (Ústí nad Labem, Litoměřice…):
       <div class="poster-item reveal" role="button" tabindex="0"
            data-img="PLAKAT-X.jpg" data-alt="Plakát — místo"
            data-tag="" data-year="" data-title="Název místa"
@@ -658,17 +729,12 @@
   </div>
 </section>
 
-<!-- ══ MAPA ZAHRADY ══════════════════════════════════════
-     Mapa pochází z oficiálního webu Průhonické botanické
-     zahrady (ibotky.cz / pruhonickypark.cz) — jde o veřejně
-     publikovaný plánek sbírek, ne o naši autorskou práci.
-════════════════════════════════════════════════════════ -->
+<!-- ══ MAPA ZAHRADY — malá, doplňková ════════════════════ -->
 <section class="map-section" id="mapa">
   <div class="map-inner">
     <span class="section-label reveal">Kde rostou</span>
-    <h2 style="font-family:var(--font);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:1.4rem;" class="reveal">Mapa sbírek</h2>
-    <img class="map-img reveal" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek Průhonické botanické zahrady" loading="lazy" />
-    <p class="map-caption reveal">Mapa sbírek Průhonické botanické zahrady. Zdroj: Botanický ústav AV ČR / <a href="http://www.ibotky.cz" target="_blank" rel="noopener">ibotky.cz</a>. Sbírka kosatců je na mapě označena oranžově (sekce 1–19), pivoňky růžově, růže fialově a denivky žlutě.</p>
+    <img class="map-img reveal" id="mapImg" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek Průhonické botanické zahrady" loading="lazy" />
+    <p class="map-caption reveal">Mapa sbírek Průhonické botanické zahrady. Zdroj: Botanický ústav AV ČR / <a href="http://www.ibotky.cz" target="_blank" rel="noopener">ibotky.cz</a>. Sbírka kosatců je na mapě označena světle modře (sekce 1–19), pivoňky růžově, růže fialově a denivky žlutě.</p>
   </div>
 </section>
 
@@ -690,6 +756,18 @@
       <h3 id="modalTitle"></h3>
       <p id="modalText"></p>
     </div>
+  </div>
+</div>
+
+<!-- MAP ZOOM MODAL -->
+<div class="map-zoom-overlay" id="mapZoomOverlay">
+  <button class="map-zoom-close" id="mapZoomClose" aria-label="Zavřít">✕</button>
+  <div class="map-zoom-stage" id="mapZoomStage">
+    <img id="mapZoomImg" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek — zvětšeno" />
+  </div>
+  <div class="map-zoom-controls">
+    <button class="map-zoom-btn" id="mapZoomIn">+</button>
+    <button class="map-zoom-btn" id="mapZoomOut">−</button>
   </div>
 </div>
 
@@ -732,7 +810,7 @@
   slidesEl.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - touchStartX; if (Math.abs(dx) > 48) goTo(dx < 0 ? current + 1 : current - 1); });
   slides.forEach(slide => slide.addEventListener('click', () => openModal(slide)));
 
-  /* Marquee */
+  /* Marquee (big text over hero) */
   const mt = document.getElementById('marqueeTrack');
   let mh = '';
   for (let i = 0; i < 16; i++) mh += '<span class="marquee-text">NOT TRENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
@@ -765,7 +843,79 @@
   });
   modalClose.addEventListener('click', closeModal);
   modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* Map zoom modal */
+  const mapImg        = document.getElementById('mapImg');
+  const mapZoomOverlay = document.getElementById('mapZoomOverlay');
+  const mapZoomClose  = document.getElementById('mapZoomClose');
+  const mapZoomImg    = document.getElementById('mapZoomImg');
+  const mapZoomStage  = document.getElementById('mapZoomStage');
+  const mapZoomIn     = document.getElementById('mapZoomIn');
+  const mapZoomOut    = document.getElementById('mapZoomOut');
+  let mapScale = 1, mapX = 0, mapY = 0, mapDragging = false, mapStartX = 0, mapStartY = 0;
+
+  function setMapTransform() {
+    mapZoomImg.style.transform = 'translate(' + mapX + 'px,' + mapY + 'px) scale(' + mapScale + ')';
+  }
+  function openMapZoom() {
+    mapScale = 1; mapX = 0; mapY = 0;
+    setMapTransform();
+    mapZoomOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMapZoom() {
+    mapZoomOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  mapImg.addEventListener('click', openMapZoom);
+  mapZoomClose.addEventListener('click', closeMapZoom);
+  mapZoomOverlay.addEventListener('click', e => { if (e.target === mapZoomOverlay) closeMapZoom(); });
+  mapZoomIn.addEventListener('click', () => { mapScale = Math.min(mapScale * 1.4, 8); setMapTransform(); });
+  mapZoomOut.addEventListener('click', () => { mapScale = Math.max(mapScale / 1.4, 0.5); setMapTransform(); });
+  mapZoomStage.addEventListener('wheel', e => {
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 1.12 : 0.89;
+    mapScale = Math.min(Math.max(mapScale * delta, 0.5), 8);
+    setMapTransform();
+  }, { passive: false });
+  mapZoomImg.addEventListener('mousedown', e => {
+    mapDragging = true;
+    mapZoomImg.classList.add('dragging');
+    mapStartX = e.clientX - mapX;
+    mapStartY = e.clientY - mapY;
+  });
+  window.addEventListener('mousemove', e => {
+    if (!mapDragging) return;
+    mapX = e.clientX - mapStartX;
+    mapY = e.clientY - mapStartY;
+    setMapTransform();
+  });
+  window.addEventListener('mouseup', () => { mapDragging = false; mapZoomImg.classList.remove('dragging'); });
+  let mapTouchStartX = 0, mapTouchStartY = 0, mapPinchDist = 0;
+  mapZoomStage.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      mapTouchStartX = e.touches[0].clientX - mapX;
+      mapTouchStartY = e.touches[0].clientY - mapY;
+    } else if (e.touches.length === 2) {
+      mapPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+  }, { passive: true });
+  mapZoomStage.addEventListener('touchmove', e => {
+    if (e.touches.length === 1) {
+      mapX = e.touches[0].clientX - mapTouchStartX;
+      mapY = e.touches[0].clientY - mapTouchStartY;
+      setMapTransform();
+    } else if (e.touches.length === 2) {
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      const delta = dist / mapPinchDist;
+      mapScale = Math.min(Math.max(mapScale * delta, 0.5), 8);
+      mapPinchDist = dist;
+      setMapTransform();
+    }
+  }, { passive: true });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeMapZoom(); }
+  });
 
   /* Scroll reveal */
   const ro = new IntersectionObserver(entries => {
