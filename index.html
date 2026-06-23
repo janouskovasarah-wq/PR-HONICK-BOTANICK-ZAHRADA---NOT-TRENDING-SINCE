@@ -128,7 +128,7 @@
     }
     .dot.active { background: #fff; transform: scale(1.4); }
 
-    /* MARQUEE — rychlý, tučný obrys */
+    /* MARQUEE */
     .marquee-wrap {
       position: absolute; bottom: 68px; left: 0; right: 0;
       z-index: 10; overflow: hidden; pointer-events: none;
@@ -159,7 +159,6 @@
       letter-spacing: 0.02em; line-height: 1.0;
       color: var(--ink); margin-bottom: 1rem;
     }
-    /* NOT TRENDING — černý, tučný + umělecký projekt na stejném řádku */
     .since-row {
       display: flex; flex-wrap: wrap; align-items: baseline;
       gap: 0.5em; margin-bottom: 2rem;
@@ -209,7 +208,6 @@
       transition: transform 0.7s var(--ease);
     }
     .gallery-item:hover img { transform: scale(1.06); }
-    /* overlay jen dole — název + rok, BEZ nápisu nahoře */
     .gallery-item-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
@@ -229,6 +227,54 @@
       letter-spacing: 0.08em; font-weight: 300;
     }
 
+    /* PEOPLE — Sekerka + Caspers section */
+    .people-section {
+      padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px);
+      border-top: 1px solid #e8e8e6;
+      border-bottom: 1px solid #e8e8e6;
+    }
+    .people-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    @media (min-width: 700px) { .people-grid { grid-template-columns: 1fr 1fr; } }
+    .person-card { }
+    .person-photo {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: #f2f2f0;
+    }
+    .person-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .person-photo.placeholder {
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed #ccc;
+    }
+    .person-photo.placeholder span {
+      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #aaa;
+      text-align: center; padding: 0 16px;
+    }
+    .person-name {
+      font-size: 1rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--ink); margin-bottom: 2px;
+    }
+    .person-role {
+      font-size: 0.78rem; color: var(--dim); letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .person-quote {
+      font-size: 0.88rem; line-height: 1.8; color: #444;
+    }
+    .person-link {
+      display: inline-block; margin-top: 10px;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink); border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px; transition: opacity 0.2s;
+    }
+    .person-link:hover { opacity: 0.6; }
+
     /* POSTERS */
     .posters-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); background: var(--ink); }
     .posters-inner { max-width: 1200px; margin: 0 auto; }
@@ -243,19 +289,33 @@
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
     }
     @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; } }
-    .poster-item { aspect-ratio: 2/3; overflow: hidden; position: relative; }
+    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; } }
+    .poster-item { position: relative; aspect-ratio: 2/3; overflow: hidden; cursor: pointer; }
     .poster-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
     .poster-item:hover img { transform: scale(1.05); }
-    .poster-placeholder {
-      aspect-ratio: 2/3; background: #1c1c1a;
-      border: 1px dashed rgba(255,255,255,0.1);
-      display: flex; align-items: center; justify-content: center;
+    .poster-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.35s;
+      display: flex; align-items: flex-end; padding: 10px;
     }
-    .poster-placeholder span {
-      font-size: 0.68rem; letter-spacing: 0.16em;
-      text-transform: uppercase; color: rgba(255,255,255,0.16);
+    .poster-item:hover .poster-item-overlay { opacity: 1; }
+    .poster-item-overlay span {
+      font-size: 0.68rem; color: #fff; letter-spacing: 0.04em;
+      font-weight: 400; line-height: 1.3;
     }
+
+    /* MAP */
+    .map-section { padding: clamp(40px,6vw,80px) clamp(24px,5vw,80px); }
+    .map-inner { max-width: 1200px; margin: 0 auto; }
+    .map-img {
+      width: 100%; border: 1px solid #e8e8e6;
+    }
+    .map-caption {
+      font-size: 0.78rem; color: var(--dim); line-height: 1.7;
+      margin-top: 12px; max-width: 680px;
+    }
+    .map-caption a { text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
 
     /* FOOTER */
     footer {
@@ -323,7 +383,9 @@
 <div class="dropdown" id="dropdown">
   <a href="#o-projektu">O projektu</a>
   <a href="#fotografie">Fotografie</a>
+  <a href="#lide">Lidé za sbírkou</a>
   <a href="#plakaty">Plakáty v terénu</a>
+  <a href="#mapa">Mapa zahrady</a>
   <a href="#kontakt">Kontakt</a>
 </div>
 
@@ -338,51 +400,51 @@
   <div class="slides" id="slides">
 
     <div class="slide"
-         data-img="PRUHONICE-1.jpg" data-alt="Queen of May"
-         data-tag="Iris germanica" data-year="~ 1858"
+         data-img="PRUHONICE-1.jpg" data-alt="Mexicana"
+         data-tag="Iris germanica (bradatý)" data-year="1859"
+         data-title="Mexicana"
+         data-text="'Mexicana' vyšlechtil John Salter před rokem 1859. Patří mezi bradaté kosatce — název odkazuje na charakteristický 'kartáček' (vousek) uprostřed spodních okvětních lístků, který má napodobovat tykadla hmyzu a láká opylovače. U Mexicany jsou kartáčky sytě žluté až oranžové, na bílém podkladu žíhaném vínově červenou.">
+      <img src="PRUHONICE-1.jpg" alt="Mexicana" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-3.jpg" data-alt="Celeste"
+         data-tag="Iris pallida" data-year="1858"
+         data-title="Celeste"
+         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Má jednobarevné, nebesky modré květy s nádechem bílé a je známá svou silnou, sladkou vůní.">
+      <img src="PRUHONICE-3.jpg" alt="Celeste" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-4.jpg" data-alt="Pallida Dalmatica"
+         data-tag="Iris pallida" data-year="před 1600"
+         data-title="Pallida Dalmatica"
+         data-text="Kosatec dalmatský patří k nejstarším pěstovaným odrůdám vůbec — zmiňuje se už herbář z roku 1597. Z jeho oddenků se po dobu sušení trvající 2-5 let vyrábí tzv. kosatcový (fialkový) kořen, dodnes používaný v parfumerii jako fixativ vůně — a překvapivě i při výrobě ginu.">
+      <img src="PRUHONICE-4.jpg" alt="Pallida Dalmatica" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-5.jpg" data-alt="Princess Beatrice"
+         data-tag="Iris pallida" data-year="1898"
+         data-title="Princess Beatrice"
+         data-text="'Princess Beatrice' představil v roce 1898 britský šlechtitel Barr. Mnozí odborníci se dodnes přou, zda nejde jen o jiné jméno pro starší odrůdu Dalmatica — zmatek kolem názvů historických kosatců byl běžný už ve viktoriánské éře, kdy se rostliny šířily mezi zahradníky bez jednotné evidence.">
+      <img src="PRUHONICE-5.jpg" alt="Princess Beatrice" />
+    </div>
+
+    <div class="slide"
+         data-img="PRUHONICE-6.jpg" data-alt="Queen of May"
+         data-tag="Iris germanica (bradatý)" data-year="1859"
          data-title="Queen of May"
-         data-text="Jedna z nejstarších zaznamenaných odrůd kosatce německého s jemnými teplými tóny. Odrůda 'Queen of May' pochází z 50. let 19. století a patří k historickým kultivarům uchovaným v průhonické sbírce.">
-      <img src="PRUHONICE-1.jpg" alt="Queen of May" />
+         data-text="'Queen of May' vyšlechtil John Salter, stejný zahradník jako u odrůdy Mexicana, před rokem 1859. Patří mezi nejstarší dochované Salterovy kultivary — z původních dvaceti jeho odrůd se v kultuře udrželo jen asi sedm.">
+      <img src="PRUHONICE-6.jpg" alt="Queen of May" />
     </div>
 
     <div class="slide"
-         data-img="PRUHONICE-2.jpg" data-alt="Jacquesiana"
-         data-tag="Iris germanica" data-year="~ 1840"
-         data-title="Jacquesiana"
-         data-text="'Jacquesiana' byl vyšlechtěn francouzským zahradníkem Lémonem v roce 1840 a pojmenován na počest Henriho-Antoina Jacquese. Patří k nejstarším stále pěstovaným odrůdám kosatce v historických sbírkách světa.">
-      <img src="PRUHONICE-2.jpg" alt="Jacquesiana" />
-    </div>
-
-    <div class="slide"
-         data-img="PRUHONICE-4.jpg" data-alt="Madame Chéreau"
-         data-tag="Iris germanica" data-year="1844"
-         data-title="Madame Chéreau"
-         data-text="'Madame Chéreau' — pojmenovaná na počest manželky prezidenta francouzské zahradnické společnosti — pochází z roku 1844. Je jednou z nejpopulárnějších odrůd 19. století a dodnes patří k nejhledanějším historickým kultivarům.">
-      <img src="PRUHONICE-4.jpg" alt="Madame Chéreau" />
-    </div>
-
-    <div class="slide"
-         data-img="PRUHONICE-5.jpg" data-alt="Faustine"
-         data-tag="Iris germanica" data-year="1859"
-         data-title="Faustine"
-         data-text="'Faustine' z roku 1859 představuje typický příklad francouzského šlechtění druhé poloviny 19. století. Její jemné zbarvení a elegantní tvar okvětních lístků ji řadí mezi nejcennější historické odrůdy průhonické sbírky.">
-      <img src="PRUHONICE-5.jpg" alt="Faustine" />
-    </div>
-
-    <div class="slide"
-         data-img="PRUHONICE-6.jpg" data-alt="Honorabile"
-         data-tag="Iris germanica" data-year="1840"
-         data-title="Honorabile"
-         data-text="'Honorabile' z roku 1840 je jednou z nejdéle pěstovaných odrůd kosatce vůbec. Její odolnost a krása ji po více než 180 let udržují v zahradách po celém světě. V Průhonicích je součástí chronologicky řazené expozice historických kultivarů.">
-      <img src="PRUHONICE-6.jpg" alt="Honorabile" />
-    </div>
-
-    <div class="slide"
-         data-img="PRUHONICE-7.jpg" data-alt="Flavescens"
-         data-tag="Iris germanica" data-year="&lt; 1813"
-         data-title="Flavescens"
-         data-text="'Flavescens' je doložena před rokem 1813 a patří tak k vůbec nejstarším pojmenovaným odrůdám kosatce. Průhonická botanická zahrada ji uchovává jako součást svého genofondového poslání — záchrana kultivarů, jejichž existenci by jinak pohltilo zapomnění.">
-      <img src="PRUHONICE-7.jpg" alt="Flavescens" />
+         data-img="PRUHONICE-7.jpg" data-alt="Gracchus"
+         data-tag="Iris germanica (bradatý)" data-year="1884"
+         data-title="Gracchus"
+         data-text="'Gracchus' vyšlechtil Thomas Ware v roce 1884 a o rok později získal ocenění First Class Certificate Královské zahradnické společnosti (RHS). Žluté kartáčky a karmínově žíhané pády z něj dodnes dělají oblíbenou odrůdu mezi sběrateli historických kosatců — navzdory tomu, že byl roku 1924 paradoxně zařazen na 'černou listinu' jako zastaralý.">
+      <img src="PRUHONICE-7.jpg" alt="Gracchus" />
     </div>
 
   </div>
@@ -406,109 +468,207 @@
       <span class="project-type">Umělecký projekt</span>
     </div>
     <div class="title-text reveal">
-      <p>Projekt vznikl v rámci klauzurního zadání ve spolupráci s Průhonickou botanickou zahradou — institucí, která spravuje jednu z největších světových sbírek historických odrůd pivoněk a růží, ale i kosatců, na které se v naší práci zaměřujeme. Zahrada pečuje o kultivary staré dvě stě, někdy i více let — rostliny, které nesou jména z dob, kdy zahradnictví bylo uměním i vědou zároveň.</p>
-      <p>Náš projekt se snaží poukázat na důležitost jejich práce a dát do povědomí zájem o instituce, jako je Průhonická botanická zahrada. NOT TRENDING pojmenovává právě neviditelnou hodnotu těchto míst: rádi se na to podíváme, nebo to chceme na zahrádku — ale dál nic.</p>
+      <p>Projekt nese název Not Trending a vznikl ve spolupráci s Průhonickou botanickou zahradou, která spravuje jednu z největších sbírek historických odrůd pivoněk, růží, denivek a kosatců, na které se v naší práci zaměřujeme. Některé z těchto rostlin mají původ sahající až do 16. století a představují živé kulturní dědictví.</p>
+      <p>Naše klauzurní práce vznikala hlavně z rozhovorů s vedoucím botanické zahrady Pavlem Sekerkou a stráveným časem v zahradě. Od pana Sekerky jsme dostali spoustu podnětů na to, na co se v Průhonické botanické zahradě zaměřit. Inspirací nám byla jeho myšlenka, který proměnlivou popularitu rostlin přirovnal k módním trendům: desetiletý hadr nechceš, ale třicetiletý ano. Naše rozhovory se věnovaly i financování pracovníků zahrady, problematice rozdělení botanické zahrady a parku a postavení institucí spadajících pod Akademii věd.</p>
+      <p>Z těchto rozhovorů jsme se zaměřili na proměnlivost hodnoty rostlin v čase a s tím související proměnlivý společenský zájem. Botanická zahrada zde vystupuje jako instituce, která dlouhodobě uchovává a spravuje rostlinné sbírky bez ohledu na jejich aktuální popularitu či atraktivitu — a kdyby se o toto kulturní dědictví nestarali právě oni, řada odrůd by dnes už neexistovala.</p>
+      <p>Název NOT TRENDING SINCE odkazuje k vizuálnímu jazyku reklamy a módních kampaní, který je v projektu přenesen do prostředí botanické zahrady. Slogan pracuje s ironickým napětím mezi estetizací a pomíjivostí mediální pozornosti — rostliny jsou zde zobrazeny jako vizuálně přitažlivé objekty, jejichž význam nestojí na okamžité viditelnosti ani aktuálním zájmu veřejnosti. Inspirací nám byla estetika reklamních plakátů 70. let, které intenzivně pracovaly s vizuální přitažlivostí, jednoduchým rázným sloganem a pestrými barvami. Proto jsme se rozhodli projekt fotit na středoformát, aby plakáty byly esteticky silné a barevně výrazné — analogové fotografii se sám dál věnuji a snažím se v ní rozvíjet.</p>
+      <p>Projekt tedy obrací pozornost k botanické zahradě jako místu, které o rostliny pečuje bez ohledu na to, zda jsou v dané chvíli v centru veřejné pozornosti. Zahrada totiž není jen relaxační estetická zóna — uchovává jednu z největších sbírek kulturních rostlin na světě, a bez její práce by řada těchto odrůd dnes už neexistovala.</p>
+      <p>K propagaci byly vytvořeny plakáty, které byly vyvěšeny ve veřejném prostoru v Praze, Ústí nad Labem, Litoměřicích, Průhonicích a Plzni. Každý z nich obsahuje QR kód odkazující na tuto webovou stránku. Společně tak tvoří propagační materiál, který upozorňuje na význam práce, jež by jinak zůstala bez povšimnutí.</p>
     </div>
   </div>
 </section>
 
-<!-- ══ GALERIE ════════════════════════════════════════════
-     Přidat fotku: zkopírujte blok gallery-item, změňte src + data-*
-════════════════════════════════════════════════════════ -->
+<!-- ══ GALERIE ════════════════════════════════════════════ -->
 <section class="gallery-section" id="fotografie">
   <span class="section-label reveal">Fotografie</span>
   <div class="gallery-grid">
 
     <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-1.jpg" data-alt="Queen of May"
-         data-tag="Iris germanica" data-year="~ 1858"
-         data-title="Queen of May"
-         data-text="Jedna z nejstarších zaznamenaných odrůd kosatce německého s jemnými teplými tóny. Odrůda 'Queen of May' pochází z 50. let 19. století a patří k historickým kultivarům uchovaným v průhonické sbírce.">
-      <img src="PRUHONICE-1.jpg" alt="Queen of May" loading="lazy" />
+         data-img="PRUHONICE-1.jpg" data-alt="Mexicana"
+         data-tag="Iris germanica (bradatý)" data-year="1859"
+         data-title="Mexicana"
+         data-text="'Mexicana' vyšlechtil John Salter před rokem 1859. Patří mezi bradaté kosatce — název odkazuje na charakteristický 'kartáček' (vousek) uprostřed spodních okvětních lístků, který má napodobovat tykadla hmyzu a láká opylovače. U Mexicany jsou kartáčky sytě žluté až oranžové, na bílém podkladu žíhaném vínově červenou.">
+      <img src="PRUHONICE-1.jpg" alt="Mexicana" loading="lazy" />
       <div class="gallery-item-overlay">
-        <span class="g-name">Queen of May</span>
-        <span class="g-year">Iris germanica · ~ 1858</span>
-      </div>
-    </div>
-
-    <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-2.jpg" data-alt="Jacquesiana"
-         data-tag="Iris germanica" data-year="~ 1840"
-         data-title="Jacquesiana"
-         data-text="'Jacquesiana' byl vyšlechtěn francouzským zahradníkem Lémonem v roce 1840 a pojmenován na počest Henriho-Antoina Jacquese. Patří k nejstarším stále pěstovaným odrůdám kosatce v historických sbírkách světa.">
-      <img src="PRUHONICE-2.jpg" alt="Jacquesiana" loading="lazy" />
-      <div class="gallery-item-overlay">
-        <span class="g-name">Jacquesiana</span>
-        <span class="g-year">Iris germanica · ~ 1840</span>
-      </div>
-    </div>
-
-    <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-4.jpg" data-alt="Madame Chéreau"
-         data-tag="Iris germanica" data-year="1844"
-         data-title="Madame Chéreau"
-         data-text="'Madame Chéreau' — pojmenovaná na počest manželky prezidenta francouzské zahradnické společnosti — pochází z roku 1844. Je jednou z nejpopulárnějších odrůd 19. století a dodnes patří k nejhledanějším historickým kultivarům.">
-      <img src="PRUHONICE-4.jpg" alt="Madame Chéreau" loading="lazy" />
-      <div class="gallery-item-overlay">
-        <span class="g-name">Madame Chéreau</span>
-        <span class="g-year">Iris germanica · 1844</span>
-      </div>
-    </div>
-
-    <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-5.jpg" data-alt="Faustine"
-         data-tag="Iris germanica" data-year="1859"
-         data-title="Faustine"
-         data-text="'Faustine' z roku 1859 představuje typický příklad francouzského šlechtění druhé poloviny 19. století. Její jemné zbarvení a elegantní tvar okvětních lístků ji řadí mezi nejcennější historické odrůdy průhonické sbírky.">
-      <img src="PRUHONICE-5.jpg" alt="Faustine" loading="lazy" />
-      <div class="gallery-item-overlay">
-        <span class="g-name">Faustine</span>
+        <span class="g-name">Mexicana</span>
         <span class="g-year">Iris germanica · 1859</span>
       </div>
     </div>
 
     <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-6.jpg" data-alt="Honorabile"
-         data-tag="Iris germanica" data-year="1840"
-         data-title="Honorabile"
-         data-text="'Honorabile' z roku 1840 je jednou z nejdéle pěstovaných odrůd kosatce vůbec. Její odolnost a krása ji po více než 180 let udržují v zahradách po celém světě. V Průhonicích je součástí chronologicky řazené expozice historických kultivarů.">
-      <img src="PRUHONICE-6.jpg" alt="Honorabile" loading="lazy" />
+         data-img="PRUHONICE-3.jpg" data-alt="Celeste"
+         data-tag="Iris pallida" data-year="1858"
+         data-title="Celeste"
+         data-text="'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Má jednobarevné, nebesky modré květy s nádechem bílé a je známá svou silnou, sladkou vůní.">
+      <img src="PRUHONICE-3.jpg" alt="Celeste" loading="lazy" />
       <div class="gallery-item-overlay">
-        <span class="g-name">Honorabile</span>
-        <span class="g-year">Iris germanica · 1840</span>
+        <span class="g-name">Celeste</span>
+        <span class="g-year">Iris pallida · 1858</span>
       </div>
     </div>
 
     <div class="gallery-item reveal" role="button" tabindex="0"
-         data-img="PRUHONICE-7.jpg" data-alt="Flavescens"
-         data-tag="Iris germanica" data-year="&lt; 1813"
-         data-title="Flavescens"
-         data-text="'Flavescens' je doložena před rokem 1813 a patří tak k vůbec nejstarším pojmenovaným odrůdám kosatce. Průhonická botanická zahrada ji uchovává jako součást svého genofondového poslání — záchrana kultivarů, jejichž existenci by jinak pohltilo zapomnění.">
-      <img src="PRUHONICE-7.jpg" alt="Flavescens" loading="lazy" />
+         data-img="PRUHONICE-4.jpg" data-alt="Pallida Dalmatica"
+         data-tag="Iris pallida" data-year="před 1600"
+         data-title="Pallida Dalmatica"
+         data-text="Kosatec dalmatský patří k nejstarším pěstovaným odrůdám vůbec — zmiňuje se už herbář z roku 1597. Z jeho oddenků se po dobu sušení trvající 2-5 let vyrábí tzv. kosatcový (fialkový) kořen, dodnes používaný v parfumerii jako fixativ vůně — a překvapivě i při výrobě ginu.">
+      <img src="PRUHONICE-4.jpg" alt="Pallida Dalmatica" loading="lazy" />
       <div class="gallery-item-overlay">
-        <span class="g-name">Flavescens</span>
-        <span class="g-year">Iris germanica · &lt; 1813</span>
+        <span class="g-name">Pallida Dalmatica</span>
+        <span class="g-year">Iris pallida · před 1600</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-5.jpg" data-alt="Princess Beatrice"
+         data-tag="Iris pallida" data-year="1898"
+         data-title="Princess Beatrice"
+         data-text="'Princess Beatrice' představil v roce 1898 britský šlechtitel Barr. Mnozí odborníci se dodnes přou, zda nejde jen o jiné jméno pro starší odrůdu Dalmatica — zmatek kolem názvů historických kosatců byl běžný už ve viktoriánské éře, kdy se rostliny šířily mezi zahradníky bez jednotné evidence.">
+      <img src="PRUHONICE-5.jpg" alt="Princess Beatrice" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Princess Beatrice</span>
+        <span class="g-year">Iris pallida · 1898</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-6.jpg" data-alt="Queen of May"
+         data-tag="Iris germanica (bradatý)" data-year="1859"
+         data-title="Queen of May"
+         data-text="'Queen of May' vyšlechtil John Salter, stejný zahradník jako u odrůdy Mexicana, před rokem 1859. Patří mezi nejstarší dochované Salterovy kultivary — z původních dvaceti jeho odrůd se v kultuře udrželo jen asi sedm.">
+      <img src="PRUHONICE-6.jpg" alt="Queen of May" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Queen of May</span>
+        <span class="g-year">Iris germanica · 1859</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" role="button" tabindex="0"
+         data-img="PRUHONICE-7.jpg" data-alt="Gracchus"
+         data-tag="Iris germanica (bradatý)" data-year="1884"
+         data-title="Gracchus"
+         data-text="'Gracchus' vyšlechtil Thomas Ware v roce 1884 a o rok později získal ocenění First Class Certificate Královské zahradnické společnosti (RHS). Žluté kartáčky a karmínově žíhané pády z něj dodnes dělají oblíbenou odrůdu mezi sběrateli historických kosatců — navzdory tomu, že byl roku 1924 paradoxně zařazen na 'černou listinu' jako zastaralý.">
+      <img src="PRUHONICE-7.jpg" alt="Gracchus" loading="lazy" />
+      <div class="gallery-item-overlay">
+        <span class="g-name">Gracchus</span>
+        <span class="g-year">Iris germanica · 1884</span>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ══ PLAKÁTY V TERÉNU ══════════════════════════════════
-     Nahraďte poster-placeholder bloky:
-     <div class="poster-item">
-       <img src="PLAKAT-X.jpg" alt="Plakát" loading="lazy" />
-     </div>
+<!-- ══ LIDÉ ZA SBÍRKOU ═══════════════════════════════════
+     Pavel Sekerka — vedoucí zahrady, kurátor sbírky pivoněk
+     a Národní sbírky sněženek.
+     Kurátorkou sbírky KOSATCŮ je Ing. Zuzana Caspers
+     (ne Lucie Papoušková — to jméno se nepotvrdilo, proto
+     zde uvádíme ověřenou osobu). Fotku paní Caspers
+     nemáme, proto je tu prozatím placeholder + odkaz na
+     herbář kosatců na ibotky.cz.
 ════════════════════════════════════════════════════════ -->
+<section class="people-section" id="lide">
+  <div class="people-grid">
+
+    <div class="person-card reveal">
+      <div class="person-photo">
+        <img src="SEKERKA.jpg" alt="Pavel Sekerka, vedoucí Průhonické botanické zahrady" loading="lazy" />
+      </div>
+      <div class="person-name">Pavel Sekerka</div>
+      <div class="person-role">Vedoucí Průhonické botanické zahrady</div>
+      <p class="person-quote">Kurátor sbírky pivoněk a Národní sbírky sněženek. Od roku 2010 vede Průhonickou botanickou zahradu Botanického ústavu AV ČR.</p>
+    </div>
+
+    <div class="person-card reveal">
+      <div class="person-photo">
+        <img src="PRUHONICE-4.jpg" alt="Kosatec ze sbírky, kterou kurátoruje Zuzana Caspers" loading="lazy" />
+      </div>
+      <div class="person-name">Zuzana Caspers</div>
+      <div class="person-role">Kurátorka sbírky kosatců</div>
+      <p class="person-quote">Stará se o sbírku, která patří mezi čtyři největší kosatcové sbírky ve světě. Více o historii a odrůdách kosatců najdete v herbáři na webu zahrady.</p>
+      <a class="person-link" href="http://www.ibotky.cz/clanky/herbar-kosatce/strana-2.html" target="_blank" rel="noopener">Herbář kosatců — ibotky.cz →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ PLAKÁTY V TERÉNU ══════════════════════════════════ -->
 <section class="posters-section" id="plakaty">
   <div class="posters-inner">
     <h2 class="reveal">Plakáty<br>v terénu</h2>
     <div class="posters-grid">
-      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
-      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
-      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
-      <div class="poster-placeholder reveal"><span>foto plakátu</span></div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-ANDEL.jpg" data-alt="Plakát — Anděl café, Praha"
+           data-tag="Praha" data-year=""
+           data-title="Anděl café"
+           data-text="Plakát vyvěšený v Anděl café v Praze.">
+        <img src="PLAKAT-ANDEL.jpg" alt="Plakát — Anděl café, Praha" loading="lazy" />
+        <div class="poster-item-overlay"><span>Anděl café, Praha</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-NARODNI-DIVADLO.jpg" data-alt="Plakát — okolí Národního divadla, Praha"
+           data-tag="Praha" data-year=""
+           data-title="Národní divadlo"
+           data-text="Plakát vyvěšený v okolí Národního divadla v Praze.">
+        <img src="PLAKAT-NARODNI-DIVADLO.jpg" alt="Plakát — okolí Národního divadla, Praha" loading="lazy" />
+        <div class="poster-item-overlay"><span>Národní divadlo, Praha</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-PEDF-UK.jpg" data-alt="Plakát — Pedagogická fakulta UK, Praha"
+           data-tag="Praha" data-year=""
+           data-title="PedF UK"
+           data-text="Plakát vyvěšený na Pedagogické fakultě Univerzity Karlovy v Praze.">
+        <img src="PLAKAT-PEDF-UK.jpg" alt="Plakát — Pedagogická fakulta UK, Praha" loading="lazy" />
+        <div class="poster-item-overlay"><span>PedF UK, Praha</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-DRUZBA.jpg" data-alt="Plakát — Univerzitní kavárna Družba"
+           data-tag="" data-year=""
+           data-title="Univerzitní kavárna Družba"
+           data-text="Plakát vyvěšený v Univerzitní kavárně Družba.">
+        <img src="PLAKAT-DRUZBA.jpg" alt="Plakát — Univerzitní kavárna Družba" loading="lazy" />
+        <div class="poster-item-overlay"><span>Kavárna Družba</span></div>
+      </div>
+
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-PRUHONICE.jpg" data-alt="Plakát — Průhonice, u botanické zahrady"
+           data-tag="Průhonice" data-year=""
+           data-title="Průhonice"
+           data-text="Plakát vyvěšený přímo v Průhonicích, u informační tabule botanické zahrady.">
+        <img src="PLAKAT-PRUHONICE.jpg" alt="Plakát — Průhonice" loading="lazy" />
+        <div class="poster-item-overlay"><span>Průhonice</span></div>
+      </div>
+
+      <!--
+      PŘIDAT DALŠÍ PLAKÁT (Ústí nad Labem, Litoměřice, Plzeň…):
+      <div class="poster-item reveal" role="button" tabindex="0"
+           data-img="PLAKAT-X.jpg" data-alt="Plakát — místo"
+           data-tag="" data-year="" data-title="Název místa"
+           data-text="Popis...">
+        <img src="PLAKAT-X.jpg" alt="Plakát — místo" loading="lazy" />
+        <div class="poster-item-overlay"><span>Název místa</span></div>
+      </div>
+      -->
+
     </div>
+  </div>
+</section>
+
+<!-- ══ MAPA ZAHRADY ══════════════════════════════════════
+     Mapa pochází z oficiálního webu Průhonické botanické
+     zahrady (ibotky.cz / pruhonickypark.cz) — jde o veřejně
+     publikovaný plánek sbírek, ne o naši autorskou práci.
+════════════════════════════════════════════════════════ -->
+<section class="map-section" id="mapa">
+  <div class="map-inner">
+    <span class="section-label reveal">Kde rostou</span>
+    <h2 style="font-family:var(--font);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:1.4rem;" class="reveal">Mapa sbírek</h2>
+    <img class="map-img reveal" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek Průhonické botanické zahrady" loading="lazy" />
+    <p class="map-caption reveal">Mapa sbírek Průhonické botanické zahrady. Zdroj: Botanický ústav AV ČR / <a href="http://www.ibotky.cz" target="_blank" rel="noopener">ibotky.cz</a>. Sbírka kosatců je na mapě označena oranžově (sekce 1–19), pivoňky růžově, růže fialově a denivky žlutě.</p>
   </div>
 </section>
 
@@ -599,7 +759,7 @@
     setTimeout(() => modalClose.focus(), 100);
   }
   function closeModal() { modalOverlay.classList.remove('open'); document.body.style.overflow = ''; }
-  document.querySelectorAll('.gallery-item').forEach(item => {
+  document.querySelectorAll('.gallery-item, .poster-item').forEach(item => {
     item.addEventListener('click', () => openModal(item));
     item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(item); } });
   });
