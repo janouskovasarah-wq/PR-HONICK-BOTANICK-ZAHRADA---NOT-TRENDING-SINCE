@@ -143,13 +143,6 @@
     }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* Subtle slow pan on hero photos while marquee scrolls on top */
-    .slide img { animation: slowPan 14s ease-in-out infinite alternate; }
-    @keyframes slowPan {
-      from { transform: scale(1.06) translate(0, 0); }
-      to   { transform: scale(1.13) translate(-1.5%, -1.5%); }
-    }
-
     /* TITLE SECTION */
     .title-section {
       padding: clamp(52px,9vw,110px) clamp(24px,8vw,160px) clamp(40px,6vw,80px);
@@ -188,7 +181,8 @@
     }
     .title-text {
       font-size: clamp(0.95rem,1.3vw,1.05rem);
-      line-height: 1.9; color: #444; max-width: 640px;
+      line-height: 1.9; color: #444; max-width: 100%;
+      text-align: justify;
     }
     .title-text p + p { margin-top: 1.2em; }
 
@@ -202,9 +196,10 @@
     .gallery-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px; max-width: 900px; margin: 0 auto;
+      gap: 14px; max-width: 1100px; margin: 0 auto;
     }
-    @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
+    @media (min-width: 480px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+    @media (min-width: 760px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
     .gallery-item {
       position: relative; aspect-ratio: 3/4;
       overflow: hidden; cursor: pointer;
@@ -235,52 +230,61 @@
 
     /* PEOPLE — small, secondary section */
     .people-section {
-      padding: clamp(28px,4vw,48px) clamp(24px,5vw,80px);
+      padding: clamp(32px,5vw,56px) clamp(24px,5vw,80px);
       border-top: 1px solid #e8e8e6;
       border-bottom: 1px solid #e8e8e6;
     }
     .people-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      max-width: 600px; margin: 0 auto;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 900px; margin: 0 auto;
     }
-    .person-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    @media (min-width: 600px) { .people-grid { grid-template-columns: repeat(2, 1fr); } }
+    .person-card {
+      display: flex; align-items: center; gap: 14px;
+      text-align: left;
+    }
     .person-photo {
-      width: 88px; height: 88px; border-radius: 50%;
-      overflow: hidden; margin-bottom: 10px;
+      width: 96px; height: 120px; border-radius: var(--border-radius-md, 6px);
+      overflow: hidden; flex-shrink: 0;
       background: #f2f2f0;
     }
     .person-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .person-text { flex: 1; }
     .person-name {
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.02em; color: var(--ink); margin-bottom: 1px;
     }
     .person-role {
-      font-size: 0.65rem; color: var(--dim); letter-spacing: 0.03em;
+      font-size: 0.68rem; color: var(--dim); letter-spacing: 0.03em;
       margin-bottom: 6px;
+    }
+    .person-desc {
+      font-size: 0.74rem; color: #555; line-height: 1.5;
+      margin-bottom: 4px;
     }
     .person-link {
       display: inline-block; margin-top: 2px;
-      font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--ink); border-bottom: 1px solid var(--ink);
       padding-bottom: 1px;
     }
 
     /* POSTERS */
     .posters-section { padding: clamp(36px,5vw,60px) clamp(24px,5vw,80px); background: var(--ink); }
-    .posters-inner { max-width: 1200px; margin: 0 auto; }
+    .posters-inner { max-width: 1500px; margin: 0 auto; }
     .posters-inner h2 {
       font-family: var(--font); font-size: clamp(1.5rem,3vw,2.4rem);
       font-weight: 900; text-transform: uppercase;
       letter-spacing: 0.03em; color: #fff;
-      margin-bottom: 1.6rem; line-height: 1.05;
+      margin-bottom: 1.8rem; line-height: 1.05;
     }
     .posters-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
     }
-    @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(5, 1fr); } }
-    @media (min-width: 900px) { .posters-grid { grid-template-columns: repeat(10, 1fr); gap: 8px; } }
+    @media (min-width: 600px) { .posters-grid { grid-template-columns: repeat(5, 1fr); gap: 12px; } }
+    @media (min-width: 1000px) { .posters-grid { grid-template-columns: repeat(10, 1fr); gap: 14px; } }
     .poster-item { position: relative; aspect-ratio: 2/3; overflow: hidden; cursor: pointer; }
     .poster-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
     .poster-item:hover img { transform: scale(1.05); }
@@ -288,11 +292,11 @@
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
       opacity: 0; transition: opacity 0.35s;
-      display: flex; align-items: flex-end; padding: 6px;
+      display: flex; align-items: flex-end; padding: 8px;
     }
     .poster-item:hover .poster-item-overlay { opacity: 1; }
     .poster-item-overlay span {
-      font-size: 0.56rem; color: #fff; letter-spacing: 0.02em;
+      font-size: 0.6rem; color: #fff; letter-spacing: 0.02em;
       font-weight: 400; line-height: 1.2;
     }
 
@@ -602,17 +606,23 @@
       <div class="person-photo">
         <img src="SEKERKA.jpg" alt="Pavel Sekerka, vedoucí Průhonické botanické zahrady" loading="lazy" />
       </div>
-      <div class="person-name">Pavel Sekerka</div>
-      <div class="person-role">Vedoucí zahrady</div>
+      <div class="person-text">
+        <div class="person-name">Pavel Sekerka</div>
+        <div class="person-role">Vedoucí Průhonické botanické zahrady</div>
+        <p class="person-desc">Stará se o sbírku pivoněk a Národní sbírku sněženek.</p>
+      </div>
     </div>
 
     <div class="person-card reveal">
       <div class="person-photo">
         <img src="PRUHONICE-4.jpg" alt="Kosatec ze sbírky, kterou kurátoruje Zuzana Caspers" loading="lazy" />
       </div>
-      <div class="person-name">Zuzana Caspers</div>
-      <div class="person-role">Kurátorka sbírky kosatců</div>
-      <a class="person-link" href="http://www.ibotky.cz/clanky/herbar-kosatce/strana-2.html" target="_blank" rel="noopener">Herbář kosatců →</a>
+      <div class="person-text">
+        <div class="person-name">Zuzana Caspers</div>
+        <div class="person-role">Kurátorka sbírky kosatců</div>
+        <p class="person-desc">Stará se o sbírku, která patří mezi čtyři největší kosatcové sbírky ve světě.</p>
+        <a class="person-link" href="http://www.ibotky.cz/clanky/herbar-kosatce/strana-2.html" target="_blank" rel="noopener">Herbář kosatců →</a>
+      </div>
     </div>
 
   </div>
@@ -625,12 +635,12 @@
     <div class="posters-grid">
 
       <div class="poster-item reveal" role="button" tabindex="0"
-           data-img="PLAKAT-ANDEL.jpg" data-alt="Plakát — Anděl café, Praha"
-           data-tag="Praha" data-year=""
+           data-img="PLAKAT-ANDEL.jpg" data-alt="Plakát — Anděl café, Plzeň"
+           data-tag="Plzeň" data-year=""
            data-title="Anděl café"
-           data-text="Plakát vyvěšený v Anděl café v Praze.">
-        <img src="PLAKAT-ANDEL.jpg" alt="Plakát — Anděl café, Praha" loading="lazy" />
-        <div class="poster-item-overlay"><span>Anděl café</span></div>
+           data-text="Plakát vyvěšený v Anděl café v Plzni.">
+        <img src="PLAKAT-ANDEL.jpg" alt="Plakát — Anděl café, Plzeň" loading="lazy" />
+        <div class="poster-item-overlay"><span>Anděl café, Plzeň</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
@@ -688,30 +698,30 @@
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
-           data-img="PLAKAT-DILNY-1.jpg" data-alt="Plakát — Dílny"
+           data-img="PLAKAT-ACID-COFFEE.jpg" data-alt="Plakát — Acid Coffee"
            data-tag="" data-year=""
-           data-title="Dílny"
-           data-text="Plakát vyvěšený v prostoru Dílny.">
-        <img src="PLAKAT-DILNY-1.jpg" alt="Plakát — Dílny" loading="lazy" />
-        <div class="poster-item-overlay"><span>Dílny</span></div>
+           data-title="Acid Coffee"
+           data-text="Plakát vyvěšený v Acid Coffee.">
+        <img src="PLAKAT-ACID-COFFEE.jpg" alt="Plakát — Acid Coffee" loading="lazy" />
+        <div class="poster-item-overlay"><span>Acid Coffee</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
-           data-img="PLAKAT-DILNY-2.jpg" data-alt="Plakát — Dílny"
+           data-img="PLAKAT-MISENSKA.jpg" data-alt="Plakát — Míšenská"
            data-tag="" data-year=""
-           data-title="Dílny"
-           data-text="Plakát vyvěšený v prostoru Dílny.">
-        <img src="PLAKAT-DILNY-2.jpg" alt="Plakát — Dílny" loading="lazy" />
-        <div class="poster-item-overlay"><span>Dílny</span></div>
+           data-title="Míšenská"
+           data-text="Plakát vyvěšený na Míšenské.">
+        <img src="PLAKAT-MISENSKA.jpg" alt="Plakát — Míšenská" loading="lazy" />
+        <div class="poster-item-overlay"><span>Míšenská</span></div>
       </div>
 
       <div class="poster-item reveal" role="button" tabindex="0"
-           data-img="PLAKAT-DILNY-3.jpg" data-alt="Plakát — Dílny"
+           data-img="PLAKAT-VECERNICE.jpg" data-alt="Plakát — Večernice"
            data-tag="" data-year=""
-           data-title="Dílny"
-           data-text="Plakát vyvěšený v prostoru Dílny.">
-        <img src="PLAKAT-DILNY-3.jpg" alt="Plakát — Dílny" loading="lazy" />
-        <div class="poster-item-overlay"><span>Dílny</span></div>
+           data-title="Večernice"
+           data-text="Plakát vyvěšený v prostoru Večernice.">
+        <img src="PLAKAT-VECERNICE.jpg" alt="Plakát — Večernice" loading="lazy" />
+        <div class="poster-item-overlay"><span>Večernice</span></div>
       </div>
 
       <!--
@@ -732,7 +742,7 @@
 <!-- ══ MAPA ZAHRADY — malá, doplňková ════════════════════ -->
 <section class="map-section" id="mapa">
   <div class="map-inner">
-    <span class="section-label reveal">Kde rostou</span>
+    <span class="section-label reveal">Kde se v zahradě nacházejí</span>
     <img class="map-img reveal" id="mapImg" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek Průhonické botanické zahrady" loading="lazy" />
     <p class="map-caption reveal">Mapa sbírek Průhonické botanické zahrady. Zdroj: Botanický ústav AV ČR / <a href="http://www.ibotky.cz" target="_blank" rel="noopener">ibotky.cz</a>. Sbírka kosatců je na mapě označena světle modře (sekce 1–19), pivoňky růžově, růže fialově a denivky žlutě.</p>
   </div>
