@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Průhonická Botanická Zahrada — Not Trending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700;900&display=swap" rel="stylesheet" />
+<!--
+FONT MILKER:
+1. Stáhněte z: https://www.1001fonts.com/milker-font.html
+2. Zkopírujte Milker.otf vedle index.html
+3. Odkomentujte @font-face níže a změňte --font na 'Milker', sans-serif
+<style>@font-face { font-family:'Milker'; src:url('Milker.otf') format('opentype'); }</style>
+-->
+<style>
+:root{--font:'Lexend',sans-serif;--ink:#111110;--dim:#888;--ease:cubic-bezier(.16,1,.3,1);--nav-h:56px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:#fff;color:var(--ink);font-family:var(--font);font-weight:300;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+img{display:block;width:100%}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+a{color:inherit;text-decoration:none}
+section{scroll-margin-top:var(--nav-h)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:calc(var(--nav-h) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) clamp(12px,4vw,48px) 0;display:flex;align-items:center}
+nav::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.42),transparent);pointer-events:none}
+.hamburger{position:relative;z-index:1;width:48px;height:48px;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:10px}
+.hamburger span{display:block;height:2px;background:#fff;transition:transform .35s var(--ease),opacity .25s,width .3s;transform-origin:left center}
+.hamburger span:nth-child(3){width:65%}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translateY(-1px)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translateY(1px);width:100%}
+.dropdown{position:fixed;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));left:clamp(12px,4vw,48px);right:clamp(12px,4vw,48px);max-width:300px;background:rgba(17,17,16,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:99;padding:8px 0;border-radius:14px;transform-origin:top left;transform:scaleY(.8) translateY(-10px);opacity:0;pointer-events:none;transition:transform .3s var(--ease),opacity .25s}
+.dropdown.open{transform:none;opacity:1;pointer-events:all}
+.dropdown a{display:block;padding:16px 22px;font-size:.8rem;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85);border-radius:8px;margin:0 6px}
+.dropdown a:active,.dropdown a:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* HERO */
+.hero{position:relative;height:100vh;height:100svh;overflow:hidden}
+.slides{display:flex;height:100%;transition:transform .9s var(--ease)}
+.slide{min-width:100%;height:100%;position:relative;overflow:hidden;cursor:pointer}
+.slide img{height:100%;object-fit:cover}
+.slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.26),transparent 36%,rgba(0,0,0,.25))}
+.carousel-arrow{display:none}
+@media(min-width:768px){
+.carousel-arrow{display:flex;position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:50px;height:50px;border-radius:50%;border:1px solid rgba(255,255,255,.3);align-items:center;justify-content:center;color:#fff;font-size:1.1rem;backdrop-filter:blur(8px);background:rgba(255,255,255,.05);transition:background .3s,border-color .3s}
+.carousel-arrow:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.7)}
+.carousel-arrow.prev{left:clamp(16px,3vw,40px)}
+.carousel-arrow.next{right:clamp(16px,3vw,40px)}}
+.carousel-dots{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:4px}
+.dot{width:22px;height:22px;position:relative}
+.dot::after{content:'';position:absolute;top:50%;left:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .3s,transform .3s}
+.dot.active::after{background:#fff;transform:scale(1.4)}
+.marquee-wrap{position:absolute;bottom:calc(68px + env(safe-area-inset-bottom,0px));left:0;right:0;z-index:10;overflow:hidden;pointer-events:none}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 9s linear infinite}
+.marquee-text{font-size:clamp(3rem,10vw,9rem);font-weight:900;color:transparent;-webkit-text-stroke:2.5px rgba(255,255,255,.92);letter-spacing:.04em;text-transform:uppercase;padding-right:.5em;line-height:1}
+@media(min-width:768px){.marquee-text{-webkit-text-stroke:3.5px rgba(255,255,255,.92)}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* O PROJEKTU */
+.title-section{padding:clamp(44px,9vw,110px) clamp(20px,8vw,160px) clamp(36px,6vw,80px);max-width:1200px;margin:0 auto;border-bottom:1px solid #e8e8e6}
+.eyebrow{font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:1.2rem}
+.title-section h1{font-size:clamp(2rem,9vw,5.5rem);font-weight:900;text-transform:uppercase;letter-spacing:.02em;line-height:1;margin-bottom:1rem;overflow-wrap:anywhere}
+.since-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5em;margin-bottom:1.8rem}
+.since-tag{font-size:clamp(1rem,1.8vw,1.3rem);font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.project-type{font-size:clamp(.75rem,1.1vw,.88rem);letter-spacing:.18em;text-transform:uppercase}
+.title-text{font-size:clamp(.95rem,1.3vw,1.05rem);line-height:1.8;color:#444}
+.title-text p+p{margin-top:1.2em}
+@media(min-width:768px){.title-text{text-align:justify}}
+
+/* GALERIE */
+.gallery-section{padding:clamp(40px,7vw,90px) clamp(16px,5vw,80px)}
+.section-label{font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:.8rem;display:block}
+.hint{font-size:.85rem;color:#555;margin-bottom:1.4rem;display:flex;align-items:center;gap:8px;line-height:1.4}
+.hint b{display:inline-flex;flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;align-items:center;justify-content:center;font-weight:400;font-size:.95rem}
+.gallery-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:1100px;margin:0 auto}
+@media(min-width:560px){.gallery-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.gallery-grid{grid-template-columns:repeat(3,1fr);gap:16px}}
+.gallery-item{position:relative;aspect-ratio:4/5;overflow:hidden;cursor:pointer;background:#f2f2f0}
+.gallery-item img{height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75),transparent 45%);display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:16px}
+.g-meta{display:flex;flex-direction:column;gap:2px;min-width:0}
+.g-name{font-size:.95rem;color:#fff;letter-spacing:.04em;font-weight:700;text-transform:uppercase;line-height:1.2}
+.g-year{font-size:.74rem;color:rgba(255,255,255,.75);letter-spacing:.06em}
+.g-more{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.95);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:400;transition:transform .3s var(--ease)}
+.gallery-item:hover .g-more{transform:rotate(90deg) scale(1.1)}
+
+/* MAPA */
+.map-section{padding:clamp(28px,5vw,56px) clamp(20px,5vw,80px);border-top:1px solid #e8e8e6}
+.map-inner{max-width:420px;margin:0 auto}
+.map-img{border:1px solid #e8e8e6;cursor:zoom-in}
+.map-tap{font-size:.78rem;color:#555;margin-top:8px}
+.map-caption{font-size:.72rem;color:var(--dim);line-height:1.6;margin-top:8px}
+.map-caption a{text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.map-zoom-overlay{position:fixed;inset:0;background:rgba(8,8,7,.95);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s;overflow:hidden;touch-action:none}
+.map-zoom-overlay.open{opacity:1;pointer-events:all}
+.map-zoom-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.map-zoom-stage img{width:auto;max-width:100%;max-height:100%;transform-origin:center;cursor:grab;user-select:none;-webkit-user-drag:none}
+.map-zoom-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:10;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+.map-zoom-controls{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));right:14px;z-index:10;display:flex;flex-direction:column;gap:8px}
+.map-zoom-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+
+/* PLAKÁTY — malé, nenápadné, úplně dole */
+.posters-section{padding:clamp(24px,4vw,36px) clamp(16px,5vw,80px) 14px;background:var(--ink)}
+.posters-inner{max-width:1100px;margin:0 auto}
+.posters-inner h2{font-size:.62rem;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem;line-height:1.4}
+.posters-hint{font-size:.7rem;color:rgba(255,255,255,.3);margin:0 0 .9rem}
+.posters-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 calc(-1 * clamp(16px,5vw,80px));padding:0 clamp(16px,5vw,80px) 10px;scroll-padding-left:clamp(16px,5vw,80px)}
+.posters-grid::-webkit-scrollbar{display:none}
+.poster-item{position:relative;flex:0 0 68px;aspect-ratio:2/3;overflow:hidden;cursor:pointer;background:#222;scroll-snap-align:start;opacity:.75;transition:opacity .3s}
+.poster-item:hover,.poster-item:active{opacity:1}
+.poster-item img{height:100%;object-fit:cover}
+.poster-item-overlay{display:none}
+@media(min-width:700px){.posters-grid{flex-wrap:wrap;overflow:visible;margin:0;padding:0 0 10px}.poster-item{flex-basis:76px}}
+
+/* FOOTER */
+footer{padding:clamp(28px,4vw,44px) clamp(20px,5vw,80px) calc(clamp(28px,4vw,44px) + env(safe-area-inset-bottom,0px));background:var(--ink);border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+footer p{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+footer p:first-child{font-weight:700;color:rgba(255,255,255,.6)}
+footer a{color:rgba(255,255,255,.5);text-decoration:underline;text-underline-offset:3px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,10,9,.9);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(6px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;width:100%;max-width:1000px;max-height:92vh;max-height:92dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;display:block;border-radius:18px 18px 0 0;transform:translateY(40px);transition:transform .5s var(--ease);position:relative}
+.modal-overlay.open .modal{transform:none}
+.modal-img{height:min(55vw,320px);overflow:hidden;background:#f2f2f0}
+.modal-img img{height:100%;object-fit:cover}
+.modal-content{padding:22px 20px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:.7rem}
+.modal-tag{font-size:.65rem;letter-spacing:.24em;text-transform:uppercase;color:#999}
+.modal-year{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#aaa}
+.modal-content h3{font-size:clamp(1.5rem,6vw,2.4rem);font-weight:900;text-transform:uppercase;line-height:1.1}
+.modal-content p.modal-body{font-size:.95rem;line-height:1.8;color:#555}
+.modal-close{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:10}
+@media(min-width:640px){
+.modal-overlay{align-items:center;padding:clamp(12px,3vw,40px)}
+.modal{display:grid;grid-template-columns:1fr 1fr;border-radius:0;overflow:hidden;max-height:85vh;transform:translateY(28px) scale(.97)}
+.modal-overlay.open .modal{transform:none}
+.modal-img{height:auto}
+.modal-content{padding:clamp(24px,4vw,52px);overflow-y:auto;justify-content:center}}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div class="dropdown" id="dropdown">
+  <a href="#o-projektu">O projektu</a>
+  <a href="#fotografie">Fotografie</a>
+  <a href="#mapa">Mapa zahrady</a>
+  <a href="#plakaty">Plakáty v terénu</a>
+  <a href="#kontakt">Kontakt</a>
+</div>
+
+<nav aria-label="Hlavní navigace">
+  <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="dropdown" aria-label="Otevřít menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="uvod">
+  <div class="slides" id="slides"></div>
+  <button class="carousel-arrow prev" id="prevBtn" aria-label="Předchozí">&#8592;</button>
+  <button class="carousel-arrow next" id="nextBtn" aria-label="Následující">&#8594;</button>
+  <div class="carousel-dots" id="dots" role="tablist" aria-label="Výběr snímku"></div>
+  <div class="marquee-wrap" aria-hidden="true"><div class="marquee-track" id="marqueeTrack"></div></div>
+</section>
+
+<!-- O PROJEKTU -->
+<section id="o-projektu">
+  <div class="title-section">
+    <p class="eyebrow reveal">Průhonická botanická zahrada</p>
+    <h1 class="reveal">PRŮHONICKÁ<br>BOTANICKÁ<br>ZAHRADA</h1>
+    <div class="since-row reveal">
+      <span class="since-tag">NOT TRENDING —</span>
+      <span class="project-type">Umělecký projekt</span>
+    </div>
+    <div class="title-text reveal">
+      <p>Projekt Not Trending vznikl ve spolupráci s Průhonickou botanickou zahradou, která spravuje jednu z největších sbírek historických odrůd pivoněk, růží, denivek a kosatců, na které se v naší práci zaměřujeme. Některé z těchto rostlin mají původ sahající až do 16. století a představují živé kulturní dědictví.</p>
+      <p>Projekt obrací pozornost k botanické zahradě jako místu, které o rostliny pečuje bez ohledu na to, zda jsou v dané chvíli v centru veřejného zájmu. Zahrada není pouze estetickým nebo odpočinkovým prostorem, ale také místem dlouhodobého uchovávání historických odrůd, které by bez této péče mohly zaniknout.</p>
+      <p>Projekt vznikal na základě rozhovorů s vedoucím botanické zahrady Pavlem Sekerkou a díky času strávenému přímo v prostředí zahrady. Inspirací nám byla jeho myšlenka, že podobně jako módní trendy procházejí i rostliny obdobími zájmu a opomíjení — to, co dnes není považováno za aktuální, může být v budoucnu znovu objeveno jako cenné.</p>
+      <p>Náš projekt se zaměřuje na vztah mezi popularitou, estetikou a dlouhodobou hodnotou rostlin. Práce botanické zahrady zde představuje péči, která nepodléhá krátkodobým změnám zájmu, ale zaměřuje se na zachování rostlinného dědictví pro budoucnost.</p>
+      <p>Název NOT TRENDING SINCE odkazuje k jazyku reklamy a módních kampaní. V projektu pracujeme s kontrastem mezi rychle se měnícími trendy a rostlinami, jejichž význam není založený na momentální popularitě. Slogan využívá ironii — rostliny jsou prezentovány jako estetické objekty, jejich hodnota ale nespočívá pouze v aktuální pozornosti.</p>
+      <p>Součástí projektu jsou plakáty umístěné ve veřejném prostoru v Praze, Ústí nad Labem, Litoměřicích, Průhonicích a Plzni. Každý plakát obsahuje QR kód odkazující na webovou stránku projektu. Vzniklá vizuální kampaň propojuje jazyk propagace s tématem botanického dědictví a péče o rostliny, které by jinak mohly upadnout v zapomnění.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOTOGRAFIE -->
+<section class="gallery-section" id="fotografie">
+  <span class="section-label reveal">Fotografie</span>
+  <p class="hint reveal"><b>+</b><span>Klepněte na kosatec a dozvíte se o něm víc.</span></p>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- MAPA -->
+<section class="map-section" id="mapa">
+  <div class="map-inner">
+    <span class="section-label reveal">Kde se v zahradě nacházejí</span>
+    <img class="map-img reveal" id="mapImg" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek Průhonické botanické zahrady" loading="lazy" />
+    <p class="map-tap reveal">Klepnutím mapu zvětšíte.</p>
+    <p class="map-caption reveal">Mapa sbírek Průhonické botanické zahrady. Zdroj: Botanický ústav AV ČR / <a href="http://www.ibotky.cz" target="_blank" rel="noopener">ibotky.cz</a>. Sbírka kosatců je na mapě označena světle modře (sekce 1–19), pivoňky růžově, růže fialově a denivky žlutě.</p>
+  </div>
+</section>
+
+<!-- PLAKÁTY V TERÉNU (úplně dole) -->
+<section class="posters-section" id="plakaty">
+  <div class="posters-inner">
+    <h2 class="reveal">Plakáty v terénu</h2>
+    <p class="posters-hint reveal">Klepnutím plakát zvětšíte.</p>
+    <div class="posters-grid" id="postersGrid"></div>
+    <!-- PŘIDAT DALŠÍ PLAKÁT: doplňte řádek do pole POSTERS v <script> níže -->
+  </div>
+</section>
+
+<footer id="kontakt">
+  <p>Průhonická Botanická Zahrada</p>
+  <p>Not Trending</p>
+  <p><a href="http://www.ibotky.cz" target="_blank" rel="noopener">www.ibotky.cz</a></p>
+  <p>© 2025</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Detail fotografie">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Zavřít">✕</button>
+    <div class="modal-img"><img src="" alt="" id="modalImg" /></div>
+    <div class="modal-content">
+      <p class="modal-tag" id="modalTag"></p>
+      <p class="modal-year" id="modalYear"></p>
+      <h3 id="modalTitle"></h3>
+      <p class="modal-body" id="modalText"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MAP ZOOM -->
+<div class="map-zoom-overlay" id="mapZoomOverlay">
+  <button class="map-zoom-close" id="mapZoomClose" aria-label="Zavřít">✕</button>
+  <div class="map-zoom-stage" id="mapZoomStage"><img id="mapZoomImg" src="MAPA-PRUHONICE.jpg" alt="Mapa sbírek — zvětšeno" /></div>
+  <div class="map-zoom-controls">
+    <button class="map-zoom-btn" id="mapZoomIn" aria-label="Přiblížit">+</button>
+    <button class="map-zoom-btn" id="mapZoomOut" aria-label="Oddálit">−</button>
+  </div>
+</div>
+
+<script>
+/* DATA: [soubor, název, druh, rok, text] */
+const IRISES = [
+ ["PRUHONICE-1.jpg","Mexicana","Iris germanica (bradatý)","1859","'Mexicana' vyšlechtil John Salter před rokem 1859. Patří mezi bradaté kosatce — název odkazuje na charakteristický 'kartáček' (vousek) uprostřed spodních okvětních lístků, který má napodobovat tykadla hmyzu a láká opylovače. U Mexicany jsou kartáčky sytě žluté až oranžové, na bílém podkladu žíhaném vínově červenou."],
+ ["PRUHONICE-3.jpg","Celeste","Iris pallida","1858","'Celeste' z roku 1858 je odrůdou kosatce bledého (Iris pallida) — jednoho ze dvou divokých druhů, z nichž vznikly všechny dnešní zahradní kosatce bradaté. Je proslulá svou silnou, sladkou vůní, díky níž patřila k oblíbeným řezaným květinám viktoriánských zahrad."],
+ ["PRUHONICE-4.jpg","Pallida Dalmatica","Iris pallida","před 1600","Kosatec dalmatský patří k nejstarším pěstovaným odrůdám vůbec — zmiňuje se už herbář z roku 1597. Z jeho oddenků se po dobu sušení trvající 2-5 let vyrábí tzv. kosatcový (fialkový) kořen, dodnes používaný v parfumerii jako fixativ vůně — a překvapivě i při výrobě ginu."],
+ ["PRUHONICE-5.jpg","Princess Beatrice","Iris pallida","1898","'Princess Beatrice' představil v roce 1898 britský šlechtitel Barr. Mnozí odborníci se dodnes přou, zda nejde jen o jiné jméno pro starší odrůdu Dalmatica — zmatek kolem názvů historických kosatců byl běžný už ve viktoriánské éře, kdy se rostliny šířily mezi zahradníky bez jednotné evidence."],
+ ["PRUHONICE-6.jpg","Queen of May","Iris germanica (bradatý)","1859","'Queen of May' vyšlechtil John Salter, stejný zahradník jako u odrůdy Mexicana, před rokem 1859. Patří mezi nejstarší dochované Salterovy kultivary — z původních dvaceti jeho odrůd se v kultuře udrželo jen asi sedm."],
+ ["PRUHONICE-7.jpg","Gracchus","Iris germanica (bradatý)","1884","'Gracchus' vyšlechtil Thomas Ware v roce 1884 a o rok později získal ocenění First Class Certificate Královské zahradnické společnosti (RHS). Žluté kartáčky a karmínově žíhané pády z něj dodnes dělají oblíbenou odrůdu mezi sběrateli historických kosatců — navzdory tomu, že byl roku 1924 paradoxně zařazen na 'černou listinu' jako zastaralý."]
+];
+/* DATA: [soubor, popisek, místo/město, text] */
+const POSTERS = [
+ ["PLAKAT-ANDEL.jpg","Anděl café, Plzeň","Plzeň","Plakát vyvěšený v Anděl café v Plzni."],
+ ["PLAKAT-NARODNI-DIVADLO.jpg","Národní divadlo","Praha","Plakát vyvěšený v okolí Národního divadla v Praze."],
+ ["PLAKAT-PEDF-UK.jpg","PedF UK","Praha","Plakát vyvěšený na Pedagogické fakultě Univerzity Karlovy v Praze."],
+ ["PLAKAT-DRUZBA.jpg","Kavárna Družba","","Plakát vyvěšený v Univerzitní kavárně Družba."],
+ ["PLAKAT-PRUHONICE.jpg","Průhonice","Průhonice","Plakát vyvěšený přímo v Průhonicích, u informační tabule botanické zahrady."],
+ ["PLAKAT-CAFE-REGNER.jpg","Café Regner","","Plakát vyvěšený v Café Regner."],
+ ["PLAKAT-STANDART-CAFE.jpg","Standart Café, Plzeň","Plzeň","Plakát vyvěšený ve Standart Café v Plzni."],
+ ["PLAKAT-ACID-COFFEE.jpg","Acid Coffee","","Plakát vyvěšený v Acid Coffee."],
+ ["PLAKAT-MISENSKA.jpg","Míšenská","","Plakát vyvěšený na Míšenské."],
+ ["PLAKAT-VECERNICE.jpg","Večernice","","Plakát vyvěšený v prostoru Večernice."]
+];
+
+const $ = id => document.getElementById(id);
+
+/* Sestavení hero, galerie a plakátů */
+$('slides').innerHTML = IRISES.map(i => `<div class="slide" data-i="${IRISES.indexOf(i)}"><img src="${i[0]}" alt="${i[1]}" /></div>`).join('');
+$('galleryGrid').innerHTML = IRISES.map((i, n) => `
+ <div class="gallery-item reveal" role="button" tabindex="0" aria-label="${i[1]} — zobrazit detail" data-i="${n}">
+  <img src="${i[0]}" alt="${i[1]}" loading="lazy" />
+  <div class="gallery-item-overlay">
+   <div class="g-meta"><span class="g-name">${i[1]}</span><span class="g-year">${i[2].split(' (')[0]} · ${i[3]}</span></div>
+   <span class="g-more" aria-hidden="true">+</span>
+  </div>
+ </div>`).join('');
+$('postersGrid').innerHTML = POSTERS.map((p, n) => `
+ <div class="poster-item reveal" role="button" tabindex="0" data-p="${n}">
+  <img src="${p[0]}" alt="Plakát — ${p[1]}" loading="lazy" />
+  <div class="poster-item-overlay"><span>${p[1]}</span></div>
+ </div>`).join('');
+
+/* Hamburger */
+const hamburger = $('hamburger'), dropdown = $('dropdown');
+function toggleMenu(open) {
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', String(open));
+  dropdown.classList.toggle('open', open);
+}
+hamburger.addEventListener('click', e => { e.stopPropagation(); toggleMenu(!dropdown.classList.contains('open')); });
+document.addEventListener('click', e => { if (!dropdown.contains(e.target) && !hamburger.contains(e.target)) toggleMenu(false); });
+dropdown.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+/* Carousel */
+const slidesEl = $('slides'), slides = [...slidesEl.children], dotsEl = $('dots');
+let current = 0;
+slides.forEach((_, i) => {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.setAttribute('role', 'tab');
+  d.setAttribute('aria-label', 'Snímek ' + (i + 1));
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+function goTo(idx) {
+  dotsEl.children[current].classList.remove('active');
+  current = (idx + slides.length) % slides.length;
+  dotsEl.children[current].classList.add('active');
+  slidesEl.style.transform = 'translateX(-' + (current * 100) + '%)';
+}
+$('prevBtn').addEventListener('click', () => goTo(current - 1));
+$('nextBtn').addEventListener('click', () => goTo(current + 1));
+let tx = 0, ty = 0;
+slidesEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+slidesEl.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) goTo(dx < 0 ? current + 1 : current - 1);
+});
+
+/* Marquee */
+$('marqueeTrack').innerHTML = '<span class="marquee-text">NOT TRENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'.repeat(16);
+
+/* Modal */
+const modalOverlay = $('modalOverlay'), modalClose = $('modalClose');
+function openModal(d) {
+  $('modalImg').src = d.img; $('modalImg').alt = d.title;
+  $('modalTag').textContent = d.tag || '';
+  $('modalYear').textContent = d.year || '';
+  $('modalTitle').textContent = d.title;
+  $('modalText').textContent = d.text;
+  modalOverlay.classList.add('open');
+  modalOverlay.querySelector('.modal').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => modalClose.focus(), 100);
+}
+function closeModal() { modalOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+function openIris(n) { const i = IRISES[n]; openModal({ img: i[0], title: i[1], tag: i[2], year: i[3], text: i[4] }); }
+function openPoster(n) { const p = POSTERS[n]; openModal({ img: p[0], title: p[1], tag: p[2], year: '', text: p[3] }); }
+slides.forEach(s => s.addEventListener('click', () => openIris(+s.dataset.i)));
+document.querySelectorAll('.gallery-item, .poster-item').forEach(el => {
+  const run = () => el.dataset.i !== undefined ? openIris(+el.dataset.i) : openPoster(+el.dataset.p);
+  el.addEventListener('click', run);
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); run(); } });
+});
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+/* Mapa — zoom */
+const mapOv = $('mapZoomOverlay'), mapZ = $('mapZoomImg'), stage = $('mapZoomStage');
+let sc = 1, mx = 0, my = 0, drag = false, sx = 0, sy = 0, pd = 0;
+const apply = () => { mapZ.style.transform = `translate(${mx}px,${my}px) scale(${sc})`; };
+const clamp = v => Math.min(Math.max(v, 1), 8);
+function openMap() { sc = 1; mx = 0; my = 0; apply(); mapOv.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeMap() { mapOv.classList.remove('open'); document.body.style.overflow = ''; }
+$('mapImg').addEventListener('click', openMap);
+$('mapZoomClose').addEventListener('click', closeMap);
+mapOv.addEventListener('click', e => { if (e.target === mapOv || e.target === stage) closeMap(); });
+$('mapZoomIn').addEventListener('click', () => { sc = clamp(sc * 1.4); apply(); });
+$('mapZoomOut').addEventListener('click', () => { sc = clamp(sc / 1.4); if (sc === 1) { mx = 0; my = 0; } apply(); });
+stage.addEventListener('wheel', e => { e.preventDefault(); sc = clamp(sc * (e.deltaY < 0 ? 1.12 : .89)); apply(); }, { passive: false });
+mapZ.addEventListener('mousedown', e => { drag = true; sx = e.clientX - mx; sy = e.clientY - my; e.preventDefault(); });
+window.addEventListener('mousemove', e => { if (!drag) return; mx = e.clientX - sx; my = e.clientY - sy; apply(); });
+window.addEventListener('mouseup', () => { drag = false; });
+stage.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) { sx = e.touches[0].clientX - mx; sy = e.touches[0].clientY - my; }
+  else if (e.touches.length === 2) pd = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+}, { passive: true });
+stage.addEventListener('touchmove', e => {
+  if (e.touches.length === 1) { mx = e.touches[0].clientX - sx; my = e.touches[0].clientY - sy; apply(); }
+  else if (e.touches.length === 2) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    if (pd) { sc = clamp(sc * d / pd); apply(); }
+    pd = d;
+  }
+}, { passive: true });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeMap(); } });
+
+/* Scroll reveal */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach((en, i) => { if (en.isIntersecting) { setTimeout(() => en.target.classList.add('visible'), i * 80); ro.unobserve(en.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
